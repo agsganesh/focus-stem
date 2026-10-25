@@ -1,0 +1,2113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>Focus Stem</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fraunces:opsz,wght,SOFT,WONK@9..144,600..900,100,1&family=Atkinson+Hyperlegible:wght@400;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* Layout: 70s study-room. A sage backdrop with drifting colour pools sits under frosted "liquid glass" panels. Three screens share one glass tab bar: Timer (centred dial), Progress (lifetime total + milestone ladder), Friends (code, leaderboard, competitions). */
+:root {
+  --page: #abb290;
+  --cream: #f8eedb;
+  --cream-deep: #efdfc1;
+  --ink: #3a2a1c;
+  --muted: #7d6650;
+  --line: rgba(122, 86, 52, .22);
+  --orange: #e2651c;
+  --orange-ink: #a9460b;
+  --orange-soft: #f7c9a2;
+  --mustard: #e7a83a;
+  --sage: #93ac8c;
+  --sage-ink: #4f6a4c;
+  --sage-soft: #d6e2cf;
+  --on-accent: #fff7ea;
+  --glass-top: rgba(255, 250, 240, .62);
+  --glass-bot: rgba(255, 246, 230, .30);
+  --glass-edge: rgba(255, 255, 255, .75);
+  --glass-shade: rgba(120, 70, 25, .14);
+  --field: rgba(255, 250, 240, .6);
+  --display: "Fraunces", "Cooper Black", Georgia, serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "Space Mono", ui-monospace, Menlo, monospace;
+  --radius: 26px;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #2f3428; --cream: #1d1913; --cream-deep: #2a231a; --ink: #f6ead4; --muted: #bba78a; --line: rgba(246, 234, 212, .14);
+    --orange: #f07a30; --orange-ink: #ffa565; --orange-soft: #5a2f14; --mustard: #d99b33;
+    --sage: #98b590; --sage-ink: #b9d4b0; --sage-soft: #2c3a29; --on-accent: #1d1913;
+    --glass-top: rgba(60, 48, 34, .55); --glass-bot: rgba(35, 28, 20, .35); --glass-edge: rgba(255, 235, 205, .18);
+    --glass-shade: rgba(0, 0, 0, .35); --field: rgba(30, 24, 17, .55); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #2f3428; --cream: #1d1913; --cream-deep: #2a231a; --ink: #f6ead4; --muted: #bba78a; --line: rgba(246, 234, 212, .14);
+  --orange: #f07a30; --orange-ink: #ffa565; --orange-soft: #5a2f14; --mustard: #d99b33;
+  --sage: #98b590; --sage-ink: #b9d4b0; --sage-soft: #2c3a29; --on-accent: #1d1913;
+  --glass-top: rgba(60, 48, 34, .55); --glass-bot: rgba(35, 28, 20, .35); --glass-edge: rgba(255, 235, 205, .18);
+  --glass-shade: rgba(0, 0, 0, .35); --field: rgba(30, 24, 17, .55); color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--page);
+  color: var(--ink);
+  font: 16px/1.5 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 18px 56px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; border-radius: 10px; }
+h1, h2, h3 { text-wrap: balance; }
+
+/* ---------- Backdrop: drifting pools, film grain ---------- */
+.backdrop { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.pool { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .55; animation: drift 38s ease-in-out infinite alternate; }
+.pool.a { width: 46vmax; height: 46vmax; background: var(--orange); top: -14vmax; left: -10vmax; }
+.pool.b { width: 38vmax; height: 38vmax; background: var(--cream); bottom: -12vmax; right: -8vmax; animation-duration: 46s; animation-delay: -12s; }
+.pool.c { width: 26vmax; height: 26vmax; background: var(--mustard); top: 38%; left: 55%; opacity: .35; animation-duration: 52s; animation-delay: -24s; }
+@keyframes drift {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6vmax, 4vmax) scale(1.08); }
+  100% { transform: translate(-4vmax, 7vmax) scale(.96); }
+}
+.grain { position: absolute; inset: 0; opacity: .16; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .2 0 0 0 0 .1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+/* ---------- Liquid glass ---------- */
+.glass {
+  position: relative;
+  background: linear-gradient(150deg, var(--glass-top), var(--glass-bot));
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 var(--glass-edge), inset 0 -10px 24px -18px var(--glass-edge), 0 18px 40px -18px var(--glass-shade), 0 2px 6px var(--glass-shade);
+  border-radius: var(--radius);
+  isolation: isolate;
+}
+.glass::before { /* specular sheen along the top edge */
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
+  background: radial-gradient(120% 60% at 20% -10%, var(--glass-edge), transparent 55%);
+  opacity: .55;
+}
+
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 22px; }
+
+header.top { display: flex; align-items: center; justify-content: space-between; gap: 14px 20px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo { width: 44px; height: 44px; flex: none; }
+.brand h1 { font: 900 2rem/0.9 var(--display); font-variation-settings: "SOFT" 100, "WONK" 1; margin: 0; letter-spacing: -0.01em; color: var(--orange-ink); }
+.brand small { display: block; font: 400 .7rem/1.4 var(--mono); color: var(--ink); opacity: .75; letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; }
+
+nav.tabs { display: inline-flex; padding: 5px; gap: 2px; border-radius: 999px; }
+nav.tabs button { position: relative; z-index: 1; border: 0; background: none; padding: 8px 18px; border-radius: 999px; cursor: pointer; color: var(--muted); font-weight: 700; font-size: .92rem; transition: color .3s var(--ease); }
+nav.tabs button[aria-selected="true"] { color: var(--on-accent); }
+@media (max-width: 480px) { nav.tabs button { padding: 8px 11px; font-size: .86rem; } }
+nav.tabs .slider { position: absolute; z-index: 0; top: 5px; bottom: 5px; border-radius: 999px; background: var(--orange); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 4px 12px -4px var(--orange); transition: left .45s var(--ease), width .45s var(--ease); }
+.head-right { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.ghost { border-radius: 999px; padding: 8px 15px; cursor: pointer; color: var(--muted); font-size: .85rem; background: var(--field); border: 1px solid var(--line); transition: color .2s, transform .2s var(--ease); }
+.ghost:hover { color: var(--ink); transform: translateY(-1px); }
+
+.panel { padding: 24px; min-width: 0; }
+.panel h2 { font: 800 1.3rem/1.15 var(--display); font-variation-settings: "SOFT" 100; margin: 0; }
+.eyebrow { font: 400 .7rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.row-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.muted { color: var(--muted); }
+.small { font-size: .85rem; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+@media (max-width: 820px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+.stack { display: grid; gap: 22px; min-width: 0; }
+
+main.view { animation: rise .55s var(--ease) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Buttons: chunky retro with a hard offset shadow ---------- */
+.primary { background: var(--orange); color: var(--on-accent); border: 0; border-radius: 999px; padding: 15px 38px; font: 800 1.15rem/1 var(--display); font-variation-settings: "SOFT" 100; cursor: pointer; min-width: 168px;
+  box-shadow: 0 4px 0 var(--orange-ink), inset 0 1px 0 rgba(255,255,255,.35); transition: transform .15s var(--ease), box-shadow .15s var(--ease), background .3s; }
+.primary:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--orange-ink), inset 0 1px 0 rgba(255,255,255,.35); }
+.primary:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--orange-ink); }
+.primary.sm { padding: 11px 20px; font-size: 1rem; min-width: 0; }
+.primary:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.dark-btn { border: 0; background: var(--ink); color: var(--cream); border-radius: 14px; padding: 11px 18px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 0 rgba(0,0,0,.25); transition: transform .15s var(--ease); }
+.dark-btn:active { transform: translateY(2px); }
+input.field, select.field { border: 1px solid var(--line); background: var(--field); border-radius: 14px; padding: 11px 14px; min-width: 0; }
+form.inline { display: flex; gap: 8px; flex-wrap: wrap; }
+form.inline input.field { flex: 1 1 160px; }
+
+/* ---------- Timer ---------- */
+.timer-wrap { display: grid; gap: 22px; justify-items: center; }
+.timer { width: min(560px, 100%); display: grid; gap: 22px; justify-items: center; text-align: center; padding: 30px 22px; }
+.modes { display: inline-flex; background: var(--field); border: 1px solid var(--line); border-radius: 999px; padding: 4px; gap: 2px; flex-wrap: wrap; justify-content: center; }
+.modes button { border: 0; background: none; padding: 7px 15px; border-radius: 999px; cursor: pointer; color: var(--muted); font-size: .9rem; transition: background .3s, color .3s; }
+.modes button[aria-pressed="true"] { background: var(--ink); color: var(--cream); font-weight: 700; }
+
+/* Watch face: always dark smoked glass, whatever the page theme, so the ticks can glow. */
+.dial { --tick: #ffb06a; --tick-glow: rgba(255, 140, 60, .75); --tick-off: rgba(255, 220, 190, .13);
+  position: relative; width: min(340px, 80vw); aspect-ratio: 1; max-width: 100%; border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, #7a4a2e 0%, #5b3520 48%, #3a2215 78%, #2a1a10 100%);
+  box-shadow: 0 0 0 10px rgba(30, 20, 14, .85), 0 0 0 11px rgba(255, 230, 200, .22), 0 0 0 22px rgba(30, 20, 14, .35),
+    0 30px 60px -20px rgba(0, 0, 0, .6), inset 0 2px 1px rgba(255, 230, 200, .18), inset 0 -18px 40px rgba(0, 0, 0, .45);
+  margin: 12px; }
+.dial::after { /* glass reflection across the crystal */
+  content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background: linear-gradient(160deg, rgba(255, 240, 220, .16) 0%, rgba(255, 240, 220, .03) 38%, transparent 55%); }
+body.on-break .dial { --tick: #c9e2bf; --tick-glow: rgba(170, 215, 160, .7); }
+.dial svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.dial .ticks line { stroke: var(--tick-off); stroke-linecap: round; transition: stroke .5s ease, filter .5s ease; }
+.dial .ticks line.on { stroke: var(--tick); filter: drop-shadow(0 0 2.5px var(--tick-glow)); }
+.dial .hand { fill: var(--tick); filter: drop-shadow(0 0 4px var(--tick-glow)); transition: fill .5s; }
+body.running .dial .ticks line.on { animation: breathe 4s ease-in-out infinite; }
+@keyframes breathe { 50% { filter: drop-shadow(0 0 5px var(--tick-glow)); } }
+.readout { position: absolute; inset: 18%; display: grid; place-content: center; justify-items: center; gap: 10px; border-radius: 50%; color: #fff6ea; }
+.time { font: 400 clamp(3.4rem, 15vw, 5.2rem)/1 "DM Serif Display", "Didot", "Bodoni 72", Georgia, serif; font-variant-numeric: tabular-nums lining-nums; letter-spacing: .01em; text-shadow: 0 2px 12px rgba(0, 0, 0, .35); }
+.mode-tag { display: inline-flex; align-items: center; gap: 7px; font: 700 .78rem/1 var(--body); letter-spacing: .16em; text-transform: uppercase; color: #f5e6d3; }
+.mode-tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--tick); box-shadow: 0 0 6px var(--tick-glow); }
+body.running .mode-tag::before { background: var(--tick); }
+.now { border: 0; background: none; cursor: pointer; color: rgba(255, 240, 225, .7); font-size: .85rem; max-width: 180px; margin: 0 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 2px 10px; border-radius: 999px; transition: background .2s, color .2s; }
+.now:hover:not(:disabled) { background: rgba(255, 240, 225, .1); color: #fff6ea; }
+.now:disabled { cursor: default; }
+.controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; }
+.round { width: 48px; height: 48px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; color: var(--muted); background: var(--field); border: 1px solid var(--line); transition: color .2s, transform .25s var(--ease); }
+.round:hover { color: var(--ink); transform: rotate(-12deg); }
+#skip.round:hover { transform: translateX(2px); }
+.round svg { width: 20px; height: 20px; }
+.cycle { display: flex; gap: 7px; align-items: center; color: var(--muted); font-size: .85rem; }
+.cycle i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--orange); display: inline-block; transition: background .4s; }
+.cycle i.done { background: var(--orange); }
+.hint { color: var(--muted); font-size: .8rem; margin: 0; }
+kbd { font: 400 .72rem var(--mono); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; }
+
+.today { width: min(560px, 100%); }
+.today-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.stat { display: grid; gap: 2px; }
+.stat b { font: 900 1.8rem/1.05 var(--display); font-variation-settings: "SOFT" 100; font-variant-numeric: tabular-nums lining-nums; }
+.stat span { color: var(--muted); font-size: .8rem; }
+.goal { margin-top: 16px; display: flex; align-items: center; gap: 10px; font-size: .85rem; color: var(--muted); flex-wrap: wrap; }
+.bar-track { flex: 1 1 120px; height: 10px; background: var(--sage-soft); border-radius: 99px; overflow: hidden; box-shadow: inset 0 1px 2px var(--glass-shade); }
+.bar-track > div { height: 100%; border-radius: 99px; transition: width .8s var(--ease);
+  background: repeating-linear-gradient(-45deg, var(--sage-ink) 0 8px, var(--sage) 8px 16px); background-size: 22.6px 22.6px; }
+body.running .goal .bar-track > div { animation: march 1.6s linear infinite; }
+@keyframes march { to { background-position: 22.6px 0; } }
+
+/* ---------- Music ---------- */
+.music { width: min(560px, 100%); display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px 16px; align-items: center; }
+.music .play { width: 54px; height: 54px; border-radius: 50%; border: 0; background: var(--ink); color: var(--cream); cursor: pointer; display: grid; place-items: center; box-shadow: 0 3px 0 rgba(0,0,0,.25); transition: transform .15s var(--ease); }
+.music .play:active { transform: translateY(2px); }
+.music .play svg { width: 22px; height: 22px; }
+.music .info { display: grid; gap: 2px; min-width: 0; }
+.music .info b { font: 800 1.1rem/1.2 var(--display); font-variation-settings: "SOFT" 100; }
+.music .info span { color: var(--muted); font-size: .82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.eq { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px; margin-left: 8px; vertical-align: middle; }
+.eq i { width: 3px; background: var(--orange); border-radius: 1px; height: 30%; }
+body.music-on .eq i { animation: eq .9s ease-in-out infinite alternate; }
+.eq i:nth-child(2) { animation-delay: -.3s !important; } .eq i:nth-child(3) { animation-delay: -.6s !important; }
+@keyframes eq { from { height: 25%; } to { height: 100%; } }
+.music-row { grid-column: 1 / -1; display: flex; gap: 10px 14px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
+.stations { display: flex; gap: 6px; flex-wrap: wrap; }
+.stations button { border: 1px solid var(--line); background: var(--field); border-radius: 999px; padding: 5px 13px; cursor: pointer; font-size: .85rem; color: var(--muted); transition: background .25s, color .25s; }
+.stations button[aria-pressed="true"] { background: var(--orange); border-color: var(--orange); color: var(--on-accent); }
+.vol { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: .82rem; }
+.vol input { width: 110px; accent-color: var(--orange); }
+.music label.auto { grid-column: 1 / -1; display: flex; gap: 8px; align-items: center; font-size: .85rem; color: var(--muted); cursor: pointer; }
+.music label.auto input { width: 18px; height: 18px; accent-color: var(--orange); }
+
+/* ---------- Reviews ---------- */
+.rv-summary { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px; align-items: center; }
+@media (max-width: 560px) { .rv-summary { grid-template-columns: minmax(0, 1fr); } }
+.rv-avg { font: 900 clamp(3.4rem, 12vw, 5rem)/0.9 var(--display); font-variation-settings: "SOFT" 100, "WONK" 1; color: var(--orange-ink); font-variant-numeric: tabular-nums lining-nums; }
+.rv-avg-sub { color: var(--muted); font-size: .9rem; margin-top: 6px; }
+.stars { display: inline-flex; gap: 2px; color: var(--orange); }
+.stars svg { width: 18px; height: 18px; }
+.stars .off { color: var(--line); }
+.dist { display: grid; gap: 6px; }
+.dist-row { white-space: nowrap; display: grid; grid-template-columns: 4.6em minmax(0, 1fr) 2.4em; gap: 10px; align-items: center; font: 400 .78rem var(--mono); color: var(--muted); }
+.dist-row .bar-track { height: 9px; }
+.dist-row .bar-track > div { background: var(--orange); }
+.dist-row span:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+.star-pick { display: flex; gap: 4px; margin: 4px 0 14px; }
+.star-pick button { border: 0; background: none; padding: 2px; cursor: pointer; color: var(--line); transition: transform .2s var(--ease), color .15s; }
+.star-pick button svg { width: 38px; height: 38px; }
+.star-pick button.lit { color: var(--orange); }
+.star-pick button:hover { transform: translateY(-2px) scale(1.06); }
+.star-hint { font-size: .85rem; color: var(--muted); min-height: 1.3em; margin: -8px 0 10px; }
+textarea.field { width: 100%; min-height: 110px; resize: vertical; border: 1px solid var(--line); background: var(--field); border-radius: 14px; padding: 12px 14px; font: inherit; color: inherit; }
+.rv-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.rv-sort { display: flex; gap: 6px; flex-wrap: wrap; }
+.rv-sort button { border: 1px solid var(--line); background: var(--field); border-radius: 999px; padding: 5px 13px; cursor: pointer; font-size: .82rem; color: var(--muted); }
+.rv-sort button[aria-pressed="true"] { background: var(--sage-ink); border-color: var(--sage-ink); color: var(--on-accent); }
+ul.reviews { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+ul.reviews li { border-radius: 18px; padding: 16px; background: var(--field); border: 1px solid var(--line); display: grid; gap: 8px; animation: rise .45s var(--ease) both; animation-delay: calc(var(--i, 0) * 40ms); }
+ul.reviews li.mine { border-color: var(--orange); }
+.rv-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rv-head b { font-weight: 700; }
+.rv-head time { font: 400 .72rem var(--mono); color: var(--muted); margin-left: auto; }
+.rv-text { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* ---------- About: a root that grows down the page ---------- */
+.about-hero { display: grid; gap: 16px; padding: 34px 30px; }
+.about-title { margin: 0; font: 900 clamp(2.4rem, 7vw, 4.6rem)/0.98 var(--display); font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -0.02em; color: var(--orange-ink); text-wrap: balance; }
+.about-lede { margin: 0; font-size: 1.1rem; max-width: 56ch; }
+.about-define { margin: 0; padding-left: 14px; border-left: 3px solid var(--sage); color: var(--muted); max-width: 60ch; }
+.about-define b { color: var(--ink); }
+.scroll-hint { margin: 4px 0 0; font: 400 .72rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+/* Soil cross-section: always earthy and dark, in both themes. The top band stays clear so the sprout stands on the page. */
+.soil { position: relative; border-radius: 0 0 30px 30px; overflow: hidden; background: linear-gradient(transparent 0 150px, #3a2617 150px); }
+#soil-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.soil-head { position: relative; height: 150px; padding: 14px 8px 0; text-align: center; }
+.soil-head .eyebrow { display: block; }
+.soil-head p { margin: 6px 0 0; color: var(--muted); font-size: .9rem; }
+.soil-depth { height: 600px; }
+.root-cards { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; padding: 0 20px 40px; align-items: start; }
+.root-cards .cause:nth-child(even) { margin-top: 90px; }
+@media (max-width: 900px) {
+  .root-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 60px; }
+  .root-cards .cause:nth-child(even) { margin-top: 0; }
+  .root-cards .cause:nth-child(2) { margin-top: 70px; }
+}
+@media (max-width: 600px) {
+  .soil-depth { height: 440px; }
+  .root-cards { grid-template-columns: minmax(0, 1fr); row-gap: 46px; padding: 0 14px 34px; }
+  .root-cards .cause { width: 82%; }
+  .root-cards .cause:nth-child(2) { margin-top: 0; }
+  .root-cards .cause:nth-child(even) { justify-self: end; }
+}
+.cause { display: grid; gap: 6px; padding: 18px; border-radius: 20px; color: #f6ead4;
+  background: rgba(28, 18, 10, .62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 225, 190, .16); box-shadow: 0 12px 30px -16px rgba(0, 0, 0, .7);
+  transition: border-color .6s ease, box-shadow .6s ease; }
+.cause.reached { border-color: rgba(255, 176, 106, .75); box-shadow: 0 0 0 1px rgba(255, 176, 106, .3), 0 0 30px -6px rgba(255, 140, 60, .55), 0 12px 30px -16px rgba(0, 0, 0, .7); }
+.cause .num { font: 400 .72rem var(--mono); color: #ffb06a; letter-spacing: .08em; }
+.cause h3 { margin: 0; font: 800 1.12rem/1.2 var(--display); font-variation-settings: "SOFT" 100; color: #fff6ea; }
+.cause p { margin: 0; color: rgba(246, 234, 212, .78); font-size: .9rem; }
+.solution { display: grid; gap: 14px; }
+.solution h2 { margin: 0; font: 900 clamp(2rem, 5vw, 3rem)/1.05 var(--display); font-variation-settings: "SOFT" 100, "WONK" 1; text-wrap: balance; }
+.answers { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.answer { padding: 20px 22px; border-radius: 22px; display: grid; gap: 6px; align-content: start; }
+.answer .from { font: 400 .72rem var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.answer h3 { margin: 0; font: 800 1.1rem/1.2 var(--display); font-variation-settings: "SOFT" 100; color: var(--sage-ink); }
+.answer p { margin: 0; }
+.about-cta { display: flex; justify-content: center; padding-top: 10px; }
+@media (max-width: 560px) { .about-hero { padding: 26px 22px; } }
+
+/* ---------- Dialogs ---------- */
+dialog { border: 0; padding: 0; background: transparent; color: var(--ink); width: min(440px, calc(100vw - 32px)); max-width: none; overflow: visible; }
+dialog::backdrop { background: rgba(40, 24, 10, .35); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+dialog[open] .sheet { animation: pop .42s var(--ease) both; }
+dialog[open]::backdrop { animation: fade .3s ease both; }
+@keyframes pop { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } }
+.sheet { padding: 26px; display: grid; gap: 16px; background: linear-gradient(150deg, var(--glass-top), var(--glass-bot)), var(--cream); }
+.sheet h2 { font: 900 1.7rem/1.1 var(--display); font-variation-settings: "SOFT" 100, "WONK" 1; margin: 0; }
+.sheet p { margin: 0; color: var(--muted); font-size: .92rem; }
+.sheet input.big { width: 100%; font-size: 1.1rem; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--line); background: var(--field); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips:empty { display: none; }
+.chips button { border: 1px solid var(--line); background: var(--field); border-radius: 999px; padding: 5px 12px; font-size: .85rem; cursor: pointer; color: var(--ink); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: background .2s, transform .2s var(--ease); }
+.chips button:hover { background: var(--orange-soft); transform: translateY(-1px); }
+.dlg-actions { display: flex; justify-content: flex-end; align-items: center; gap: 10px; flex-wrap: wrap; }
+.setting { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.setting input[type=number] { width: 76px; border: 1px solid var(--line); background: var(--field); border-radius: 10px; padding: 6px 8px; text-align: right; font-variant-numeric: tabular-nums; }
+.setting input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--orange); }
+
+/* ---------- Progress ---------- */
+.hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 26px; align-items: center; }
+@media (max-width: 720px) { .hero { grid-template-columns: minmax(0, 1fr); } }
+.total { font: 900 clamp(3.4rem, 12vw, 6rem)/0.9 var(--display); font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums lining-nums; color: var(--orange-ink); }
+.total-unit { font: 700 1rem var(--body); margin-top: 10px; }
+.next-ms { display: grid; gap: 10px; }
+.next-ms h3 { margin: 0; font: 800 1.35rem/1.2 var(--display); font-variation-settings: "SOFT" 100; }
+.next-ms .bar-track { height: 16px; }
+.next-ms .bar-track > div { background: repeating-linear-gradient(-45deg, var(--orange) 0 8px, var(--mustard) 8px 16px); }
+
+.ladder { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.ms { border-radius: 18px; padding: 14px; display: grid; gap: 3px; position: relative; background: var(--field); border: 1px solid var(--line);
+  animation: rise .5s var(--ease) both; animation-delay: calc(var(--i, 0) * 35ms); transition: transform .25s var(--ease); }
+.ms:hover { transform: translateY(-2px); }
+.ms .amt { font: 900 1.45rem/1 var(--display); font-variation-settings: "SOFT" 100; font-variant-numeric: tabular-nums lining-nums; }
+.ms .lbl { font-weight: 700; font-size: .88rem; }
+.ms .sub { font: 400 .7rem var(--mono); color: var(--muted); }
+.ms.got { background: linear-gradient(160deg, var(--orange), var(--orange-ink)); border-color: transparent; color: var(--on-accent); box-shadow: inset 0 1px 0 rgba(255,255,255,.3); }
+.ms.got .sub { color: var(--on-accent); opacity: .85; }
+.ms.next { border: 2px dashed var(--orange); }
+.ms.locked { opacity: .6; }
+.ms .seal { position: absolute; top: 10px; right: 10px; width: 22px; height: 22px; }
+
+.days30 { display: grid; grid-template-columns: repeat(30, minmax(0, 1fr)); gap: 3px; align-items: end; height: 120px; }
+.days30 div { background: var(--sage); border-radius: 4px 4px 0 0; min-height: 2px; transform-origin: bottom; animation: grow .7s var(--ease) both; animation-delay: calc(var(--i, 0) * 14ms); }
+.days30 div.today { background: var(--orange); }
+@keyframes grow { from { transform: scaleY(0); } }
+.axis { display: flex; justify-content: space-between; font: 400 .7rem var(--mono); color: var(--muted); margin-top: 6px; }
+
+.subjects { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.subjects li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; font-size: .9rem; }
+.subjects .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
+.subjects .mn { font: 400 .78rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.subjects .bar-track { grid-column: 1 / -1; height: 8px; }
+.subjects .bar-track > div { background: var(--orange); }
+
+.badges { display: flex; flex-wrap: wrap; gap: 14px; }
+.badge { display: grid; justify-items: center; gap: 6px; width: 110px; text-align: center; }
+.badge svg { width: 74px; height: 74px; animation: spinIn .8s var(--ease) both; }
+@keyframes spinIn { from { opacity: 0; transform: rotate(-40deg) scale(.7); } }
+.badge b { font: 800 .9rem/1.2 var(--display); overflow-wrap: anywhere; }
+.badge span { font: 400 .68rem var(--mono); color: var(--muted); }
+
+/* ---------- Friends ---------- */
+.code-card { display: grid; gap: 12px; background: linear-gradient(150deg, color-mix(in srgb, var(--orange) 82%, transparent), color-mix(in srgb, var(--orange-ink) 70%, transparent)); color: var(--on-accent); }
+.code-card .eyebrow { color: var(--on-accent); opacity: .85; }
+.code { font: 700 clamp(2rem, 8vw, 2.7rem)/1 var(--mono); letter-spacing: .16em; }
+.code-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.code-card .copy { background: var(--on-accent); color: var(--orange-ink); border: 0; border-radius: 999px; padding: 8px 18px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 0 rgba(0,0,0,.2); transition: transform .15s var(--ease); }
+.code-card .copy:active { transform: translateY(2px); }
+.code-card p { margin: 0; font-size: .9rem; }
+.gsignin { display: grid; gap: 10px; padding: 16px 18px; border-radius: 18px; background: color-mix(in srgb, var(--cream) 55%, transparent); border: 1px solid var(--line); }
+.gsignin p { margin: 0; }
+.gsignin-me { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.gsignin-me > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.invite-email { width: 100%; }
+.code-card .form-msg { color: var(--on-accent); font-weight: 700; }
+.form-msg { font-size: .85rem; min-height: 1.3em; margin: 8px 0 0; }
+.form-msg.err { color: var(--orange-ink); }
+.form-msg.ok { color: var(--sage-ink); }
+
+.scope { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.scope button { border: 1px solid var(--line); background: var(--field); border-radius: 999px; padding: 5px 13px; cursor: pointer; font-size: .82rem; color: var(--muted); transition: background .25s, color .25s; }
+.scope button[aria-pressed="true"] { background: var(--sage-ink); border-color: var(--sage-ink); color: var(--on-accent); }
+ol.board { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+ol.board li { display: grid; grid-template-columns: 2.2em 34px minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 14px; animation: rise .45s var(--ease) both; animation-delay: calc(var(--i, 0) * 40ms); }
+ol.board li.me { background: color-mix(in srgb, var(--orange-soft) 75%, transparent); }
+ol.board .rank { font: 900 1.15rem var(--display); color: var(--muted); text-align: center; font-variant-numeric: tabular-nums lining-nums; }
+ol.board li:first-child .rank { color: var(--orange-ink); }
+ol.board img { width: 34px; height: 34px; border-radius: 50%; display: block; }
+ol.board .who { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
+ol.board .who small { font-weight: 400; color: var(--muted); }
+ol.board .mins { font: 400 .85rem var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pill { display: inline-block; font: 400 .68rem var(--mono); padding: 2px 9px; border-radius: 999px; background: var(--sage-soft); color: var(--sage-ink); white-space: nowrap; }
+.pill.live { background: var(--orange-soft); color: var(--orange-ink); }
+.x { background: none; border: 0; color: var(--muted); cursor: pointer; padding: 2px 6px; font-size: 1.1rem; line-height: 1; opacity: .55; }
+.x:hover { opacity: 1; color: var(--ink); }
+.comp { border-radius: 18px; padding: 14px; display: grid; gap: 8px; background: var(--field); border: 1px solid var(--line); }
+.comp h3 { margin: 0; font: 800 1.05rem var(--display); font-variation-settings: "SOFT" 100; overflow-wrap: anywhere; }
+.comp-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .85rem; color: var(--muted); }
+.comps { display: grid; gap: 10px; margin-top: 12px; }
+.empty { color: var(--muted); font-size: .9rem; padding: 16px; text-align: center; border: 1px dashed var(--line); border-radius: 16px; }
+.notice { padding: 14px 18px; font-size: .9rem; border-radius: 18px; }
+.notice b { color: var(--sage-ink); }
+
+.toast { position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); padding: 11px 20px; border-radius: 999px; font-size: .9rem; opacity: 0; pointer-events: none; transition: opacity .3s, transform .4s var(--ease); max-width: calc(100vw - 32px); text-align: center; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<div class="backdrop" aria-hidden="true">
+  <div class="pool a"></div><div class="pool b"></div><div class="pool c"></div>
+  <div class="grain"></div>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 44 44" aria-hidden="true">
+        <circle cx="22" cy="22" r="21" fill="var(--orange)"></circle>
+        <path d="M5 26a17 17 0 0 0 34 0" fill="none" stroke="var(--mustard)" stroke-width="3.5"></path>
+        <path d="M9 31a14 14 0 0 0 26 0" fill="none" stroke="var(--sage)" stroke-width="3.5"></path>
+        <path d="M22 33V18" stroke="var(--on-accent)" stroke-width="3" stroke-linecap="round"></path>
+        <path d="M22 21c0-5 3-8 8-8 0 5-3 8-8 8z" fill="var(--on-accent)"></path>
+        <path d="M22 25c0-4-2.5-6.5-6.5-6.5 0 4 2.5 6.5 6.5 6.5z" fill="var(--on-accent)"></path>
+      </svg>
+      <h1>Focus Stem<small>By go-getters, for go-getters</small></h1>
+    </div>
+    <div class="head-right">
+      <nav class="tabs glass" role="tablist" aria-label="Screens">
+        <span class="slider" id="slider"></span>
+        <button role="tab" type="button" data-view="about" aria-selected="false">About</button>
+        <button role="tab" type="button" data-view="timer" aria-selected="true">Timer</button>
+        <button role="tab" type="button" data-view="progress" aria-selected="false">Progress</button>
+        <button role="tab" type="button" data-view="friends" aria-selected="false">Friends</button>
+        <button role="tab" type="button" data-view="reviews" aria-selected="false">Reviews</button>
+      </nav>
+      <button class="ghost" id="open-settings" type="button">Settings</button>
+    </div>
+  </header>
+
+  <!-- ================= ABOUT ================= -->
+  <main id="view-about" class="view stack" hidden>
+    <section class="glass about-hero" aria-label="About Focus Stem">
+      <div class="eyebrow">About Focus Stem</div>
+      <h2 class="about-title">Reach the potential you already have.</h2>
+      <p class="about-lede">Most people aren't short on ability. They're short on focus, feedback and rest. Focus Stem is a study app made by students, for students, to help you do the work you're capable of, one block at a time.</p>
+      <p class="about-define"><b>Stemming</b> is the steady work of turning roots into growth. A stem carries what grows underground up toward the light, so you can see it.</p>
+      <div class="gsignin" id="gsignin" hidden>
+        <p class="small" id="gsignin-text">Sign in with your Gmail to save your progress and study with friends.</p>
+        <div id="gsignin-btn"></div>
+        <div class="gsignin-me" id="gsignin-me" hidden><span>Signed in as <b id="gsignin-name"></b></span><button class="ghost" type="button" id="gsignin-friends">Friends</button><button class="ghost" type="button" id="gsignin-out">Sign out</button></div>
+      </div>
+      <p class="scroll-hint">Scroll to follow the roots down</p>
+    </section>
+
+
+    <div class="soil" id="soil">
+      <canvas id="soil-canvas" aria-hidden="true"></canvas>
+      <div class="soil-head">
+        <span class="eyebrow">Why people don't reach their potential</span>
+        <p>Follow the root down.</p>
+      </div>
+      <div class="soil-depth" id="soil-depth" aria-hidden="true"></div>
+      <div class="root-cards">
+        <section class="cause">
+          <span class="num">ROOT 01</span>
+          <h3>No clear starting point</h3>
+          <p>Plans stay vague, so starting feels like one more decision you can't make.</p>
+        </section>
+        <section class="cause">
+          <span class="num">ROOT 02</span>
+          <h3>Constant distraction</h3>
+          <p>Phones, tabs and notifications pull your attention away faster than you can get it back.</p>
+        </section>
+        <section class="cause">
+          <span class="num">ROOT 03</span>
+          <h3>Progress you can't see</h3>
+          <p>Hours of real work leave no trace, so it feels like nothing is happening.</p>
+        </section>
+        <section class="cause">
+          <span class="num">ROOT 04</span>
+          <h3>Burnout and no rest</h3>
+          <p>Pushing without breaks drains the energy that focus depends on.</p>
+        </section>
+        <section class="cause">
+          <span class="num">ROOT 05</span>
+          <h3>Going it alone</h3>
+          <p>Without people working beside you, it's easy to stop and easy to drift.</p>
+        </section>
+      </div>
+    </div>
+
+    <section class="solution" aria-label="How Focus Stem helps">
+      <p class="eyebrow">How Focus Stem helps</p>
+      <h2>Every root has an answer.</h2>
+      <div class="answers">
+        <section class="glass answer">
+          <span class="from">Root 01 · No clear starting point</span>
+          <h3>Name it before you start</h3>
+          <p>Stem asks what you're focusing on before each block, then keeps that label on your timer and your progress.</p>
+        </section>
+        <section class="glass answer">
+          <span class="from">Root 02 · Constant distraction</span>
+          <h3>One task, one timer</h3>
+          <p>The timer keeps the time so you don't have to. Lo-fi music fills the room while you work.</p>
+        </section>
+        <section class="glass answer">
+          <span class="from">Root 03 · Progress you can't see</span>
+          <h3>Every minute counts</h3>
+          <p>Your lifetime total grows with each block, and milestones from your first minute to one million mark how far you've come.</p>
+        </section>
+        <section class="glass answer">
+          <span class="from">Root 04 · Burnout and no rest</span>
+          <h3>Rest is built in</h3>
+          <p>A short break follows each block and a long break follows every few, so you stop before you run out.</p>
+        </section>
+        <section class="glass answer">
+          <span class="from">Root 05 · Going it alone</span>
+          <h3>Study with friends</h3>
+          <p>Send an invite link, see each other's totals on a leaderboard, and enter weekly challenges that end with a champion badge.</p>
+        </section>
+      </div>
+      <div class="about-cta">
+        <button class="primary" id="about-start" type="button">Start your first block</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= TIMER ================= -->
+  <main id="view-timer" class="view timer-wrap">
+    <section class="glass timer" aria-label="Pomodoro timer">
+      <div class="modes" role="group" aria-label="Session type">
+        <button type="button" data-mode="focus" aria-pressed="true">Focus</button>
+        <button type="button" data-mode="short" aria-pressed="false">Short break</button>
+        <button type="button" data-mode="long" aria-pressed="false">Long break</button>
+      </div>
+      <div class="dial">
+        <svg viewBox="0 0 220 220" aria-hidden="true">
+          <g class="ticks" id="ticks"></g>
+          <circle class="hand" id="hand" r="4.2" cx="110" cy="22"></circle>
+        </svg>
+        <div class="readout">
+          <div class="time" id="time" role="timer">25:00</div>
+          <div class="mode-tag" id="mode-label">Focus</div>
+          <button class="now" id="now" type="button" title="Change what you're focusing on">Ready when you are</button>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="round" id="reset" type="button" aria-label="Reset timer" title="Reset">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        </button>
+        <button class="primary" id="start" type="button">Start</button>
+        <button class="round" id="skip" type="button" aria-label="Skip to next session" title="Skip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l10 7-10 7z"/><path d="M19 5v14"/></svg>
+        </button>
+      </div>
+      <div class="cycle" id="cycle"></div>
+      <p class="hint">Every focused minute counts toward your total. <kbd>Space</kbd> start or pause</p>
+    </section>
+
+    <section class="glass panel music" aria-label="Lo-fi radio">
+      <button class="play" id="music-play" type="button" aria-label="Play music">
+        <svg viewBox="0 0 24 24" fill="currentColor" id="music-icon"><path d="M8 5.5v13l11-6.5z"/></svg>
+      </button>
+      <div class="info">
+        <b>Lo-fi radio<span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></b>
+        <span id="music-desc">Made live in your browser, never the same twice</span>
+      </div>
+      <div class="music-row">
+        <div class="stations" id="stations" role="group" aria-label="Station">
+          <button type="button" data-station="rise" aria-pressed="true">Slow to fast</button>
+          <button type="button" data-station="lofi" aria-pressed="false">Lo-fi</button>
+          <button type="button" data-station="rain" aria-pressed="false">Lo-fi + rain</button>
+          <button type="button" data-station="night" aria-pressed="false">Late night</button>
+        </div>
+        <label class="vol">Volume <input type="range" id="music-vol" min="0" max="100" value="60" aria-label="Music volume"></label>
+      </div>
+      <label class="auto"><input type="checkbox" id="music-auto"> Play only while a focus block is running</label>
+    </section>
+
+    <section class="glass panel today" aria-label="Today">
+      <div class="row-head"><h2>Today</h2><span class="eyebrow" id="sync-state">Saved on this device</span></div>
+      <div class="today-row">
+        <div class="stat"><b id="s-today">0m</b><span>focused</span></div>
+        <div class="stat"><b id="s-blocks">0</b><span>blocks done</span></div>
+        <div class="stat"><b id="s-streak">0</b><span>day streak</span></div>
+      </div>
+      <div class="goal">
+        <span>Daily goal</span>
+        <div class="bar-track"><div id="goal-fill" style="width:0%"></div></div>
+        <span id="goal-text">0 / 100 min</span>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= PROGRESS ================= -->
+  <main id="view-progress" class="view stack" hidden>
+    <section class="glass panel hero" aria-label="Total focus time">
+      <div>
+        <div class="eyebrow">Lifetime focus</div>
+        <div class="total" id="p-total">0</div>
+        <div class="total-unit" id="p-unit">minutes focused</div>
+      </div>
+      <div class="next-ms">
+        <div class="eyebrow">Next milestone</div>
+        <h3 id="p-next-title">1 minute</h3>
+        <div class="bar-track"><div id="p-next-fill" style="width:0%"></div></div>
+        <span class="muted small" id="p-next-text"></span>
+      </div>
+    </section>
+
+    <section class="glass panel" aria-label="Milestones">
+      <div class="row-head"><h2>Milestones</h2><span class="eyebrow" id="p-ms-count"></span></div>
+      <ol class="ladder" id="ladder"></ol>
+    </section>
+
+    <div class="grid2">
+      <section class="glass panel" aria-label="Last 30 days">
+        <div class="row-head"><h2>Last 30 days</h2><span class="eyebrow" id="p-30-total"></span></div>
+        <div class="days30" id="days30"></div>
+        <div class="axis"><span id="ax-start"></span><span>Today</span></div>
+      </section>
+      <section class="glass panel" aria-label="What you focused on">
+        <div class="row-head"><h2>What you focused on</h2><span class="eyebrow">All time</span></div>
+        <ul class="subjects" id="subjects"></ul>
+      </section>
+    </div>
+
+    <section class="glass panel" aria-label="Badges">
+      <div class="row-head"><h2>Champion badges</h2><span class="eyebrow" id="p-badge-count"></span></div>
+      <div class="badges" id="my-badges"></div>
+    </section>
+  </main>
+
+  <!-- ================= FRIENDS ================= -->
+  <main id="view-friends" class="view stack" hidden>
+    <div class="glass notice" id="offline-note" hidden></div>
+    <div class="grid2">
+      <div class="stack">
+        <section class="glass panel code-card" aria-label="Invite friends">
+          <div class="eyebrow">Invite friends</div>
+          <p>Send a link through Gmail. When a friend opens it, you're friends and see each other on the leaderboard. Up to 30 friends.</p>
+          <input class="field invite-email" type="email" id="invite-email" placeholder="friend@gmail.com" aria-label="Friend's email address" autocomplete="off">
+          <div class="code-row"><button class="copy" id="invite-gmail" type="button">Send in Gmail</button><button class="copy" id="copy-invite" type="button">Copy link</button></div>
+          <p class="form-msg" id="friend-msg"></p>
+        </section>
+
+        <section class="glass panel" aria-label="Your name">
+          <div class="row-head" style="margin-bottom:8px"><span class="eyebrow">Your name on the leaderboard</span></div>
+          <form class="inline" id="name-form" autocomplete="off">
+            <input class="field" type="text" id="my-name" placeholder="e.g. Ganesh" aria-label="Your display name" maxlength="24">
+            <button class="dark-btn" type="submit">Save</button>
+          </form>
+        </section>
+
+        <section class="glass panel" aria-label="Competitions">
+          <div class="row-head"><h2>Competitions</h2><span class="eyebrow">Winner gets a badge</span></div>
+          <form class="inline" id="comp-form" autocomplete="off">
+            <input class="field" type="text" id="comp-name" placeholder="e.g. Weekly challenge" aria-label="Competition name" maxlength="40">
+            <select class="field" id="comp-days" aria-label="Length">
+              <option value="3">3 days</option><option value="7" selected>7 days</option><option value="14">14 days</option><option value="30">30 days</option>
+            </select>
+            <button class="primary sm" type="submit" id="comp-submit">Start</button>
+          </form>
+          <p class="form-msg" id="comp-msg"></p>
+          <div class="comps" id="comps"></div>
+        </section>
+      </div>
+
+      <section class="glass panel" aria-label="Leaderboard">
+        <div class="row-head"><h2>Leaderboard</h2><span class="eyebrow" id="friend-count">0 / 30 friends</span></div>
+        <div class="scope" id="scope" role="group" aria-label="Leaderboard period"></div>
+        <ol class="board" id="board"></ol>
+      </section>
+    </div>
+  </main>
+
+  <!-- ================= REVIEWS ================= -->
+  <main id="view-reviews" class="view stack" hidden>
+    <section class="glass panel" aria-label="Rating summary">
+      <div class="rv-summary">
+        <div>
+          <div class="eyebrow">What students think</div>
+          <div class="rv-avg" id="rv-avg">–</div>
+          <div class="stars" id="rv-avg-stars" aria-hidden="true"></div>
+          <div class="rv-avg-sub" id="rv-count">No reviews yet</div>
+        </div>
+        <div class="dist" id="rv-dist"></div>
+      </div>
+    </section>
+
+    <div class="grid2">
+      <section class="glass panel" aria-label="Write a review">
+        <h2 id="rv-form-title">Rate Focus Stem</h2>
+        <p class="muted small" style="margin:6px 0 0">How is Focus Stem working for you? Your review is shown with your leaderboard name.</p>
+        <form id="rv-form" autocomplete="off">
+          <div class="star-pick" id="star-pick" role="radiogroup" aria-label="Your rating"></div>
+          <p class="star-hint" id="star-hint">Tap a star to rate</p>
+          <textarea class="field" id="rv-text" maxlength="800" placeholder="What do you like? What should we add or fix?" aria-label="Your review"></textarea>
+          <div class="rv-actions">
+            <span class="muted small" id="rv-chars">0 / 800</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="ghost" type="button" id="rv-delete" hidden>Delete my review</button>
+              <button class="primary sm" type="submit" id="rv-submit">Post review</button>
+            </div>
+          </div>
+          <p class="form-msg" id="rv-msg"></p>
+        </form>
+      </section>
+
+      <section class="glass panel" aria-label="All reviews">
+        <div class="row-head">
+          <h2>Reviews</h2>
+          <div class="rv-sort" id="rv-sort" role="group" aria-label="Sort reviews">
+            <button type="button" data-sort="new" aria-pressed="true">Newest</button>
+            <button type="button" data-sort="high" aria-pressed="false">Highest</button>
+            <button type="button" data-sort="low" aria-pressed="false">Lowest</button>
+          </div>
+        </div>
+        <ul class="reviews" id="rv-list"></ul>
+      </section>
+    </div>
+  </main>
+</div>
+
+<dialog id="focus-dlg" aria-labelledby="focus-title">
+  <form method="dialog" class="glass sheet" id="focus-form">
+    <div class="eyebrow" id="focus-eyebrow">25 minute focus block</div>
+    <h2 id="focus-title">What are you focusing on?</h2>
+    <p>Name one thing. Keeping it small makes it easier to start.</p>
+    <input class="big" type="text" id="focus-what" placeholder="e.g. Reading, writing, a project" maxlength="80" autocomplete="off" required>
+    <div class="chips" id="focus-chips"></div>
+    <div class="dlg-actions">
+      <button class="ghost" value="cancel" type="submit" formnovalidate>Cancel</button>
+      <button class="primary sm" value="go" type="submit" id="focus-go">Start focusing</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="leave-dlg" aria-labelledby="leave-title">
+  <form method="dialog" class="glass sheet">
+    <div class="eyebrow" id="leave-eyebrow">Session in progress</div>
+    <h2 id="leave-title">Leave this session?</h2>
+    <p id="leave-text"></p>
+    <div class="dlg-actions">
+      <button class="ghost" value="leave" type="submit" id="leave-go">Leave session</button>
+      <button class="primary sm" value="stay" type="submit" autofocus>Keep going</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="settings" aria-label="Settings">
+  <form method="dialog" class="glass sheet">
+    <h2>Settings</h2>
+    <div>
+      <label class="setting">Focus length (min) <input type="number" id="set-focus" min="1" max="120"></label>
+      <label class="setting">Short break (min) <input type="number" id="set-short" min="1" max="60"></label>
+      <label class="setting">Long break (min) <input type="number" id="set-long" min="1" max="60"></label>
+      <label class="setting">Long break after (blocks) <input type="number" id="set-every" min="2" max="8"></label>
+      <label class="setting">Daily goal (min) <input type="number" id="set-goal" min="5" max="1000"></label>
+      <label class="setting">Chime when time is up <input type="checkbox" id="set-sound"></label>
+      <label class="setting">Click sounds <input type="checkbox" id="set-clicks"></label>
+      <label class="setting">Start breaks and next block automatically <input type="checkbox" id="set-auto"></label>
+    </div>
+    <div class="dlg-actions">
+      <button class="ghost" value="cancel" type="submit">Cancel</button>
+      <button class="primary sm" value="save" type="submit">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast glass" id="toast" role="status"></div>
+
+<script>
+(() => {
+  const KEY = "stem-focus-v2";
+  const MAX_FRIENDS = 30;
+  // On the hosted site (outside Claude) people sign in with Google and shared data lives in a Netlify function.
+  // Paste the OAuth web client ID from Google Cloud console > APIs & Services > Credentials.
+  const GOOGLE_CLIENT_ID = "261400203231-absiu53t54ghqpebc3294iivq2apl90d.apps.googleusercontent.com";
+  const NET = !window.claude && /^https?:$/.test(location.protocol);
+  // Read an invite (?join=<id>, or #join=<id> inside Claude) before the view router rewrites the hash.
+  let joinFrom = new URLSearchParams(location.search).get("join") || (location.hash.match(/^#join=([\w-]+)$/) || [])[1] || null;
+  if (joinFrom && !/^[\w-]{1,80}$/.test(joinFrom)) joinFrom = null;
+  if (NET) {
+    try { if (joinFrom) localStorage.setItem("stem-join", joinFrom); else joinFrom = localStorage.getItem("stem-join"); } catch (e) {}
+    if (location.search) history.replaceState(null, "", location.pathname + location.hash);
+  }
+  const $ = id => document.getElementById(id);
+  const dayKey = (d = new Date()) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  const nf = new Intl.NumberFormat();
+  const mins = s => Math.floor((s || 0) / 60);
+  const fmtMin = m => m >= 60 ? Math.floor(m / 60) + "h " + (m % 60) + "m" : m + "m";
+  const CODE_CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+  const newCode = () => Array.from({ length: 6 }, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join("");
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const MILESTONES = [
+    [1, "First minute"], [25, "One Pomodoro"], [100, "Century"], [250, "Getting serious"], [500, "Half a thousand"],
+    [1000, "Thousand club"], [2500, "Deep worker"], [5000, "Scholar"], [10000, "Ten thousand"], [25000, "Marathoner"],
+    [50000, "Master"], [100000, "Six figures"], [250000, "Legend"], [500000, "Half a million"], [1000000, "One million"]
+  ];
+
+  // ---------- Local state ----------
+  function freshState() {
+    return {
+      settings: { focus: 25, short: 5, long: 15, every: 4, goal: 100, sound: true, auto: false },
+      focusOn: "", subjects: {}, recent: [], cycleCount: 0,
+      // synced part: what goes to the shared player record
+      me: { code: newCode(), name: "", days: {}, blocks: {}, friends: [], removed: [], ms: {} }
+    };
+  }
+  let state;
+  try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) { state = null; }
+  if (!state || !state.me) state = freshState();
+  state.subjects = state.subjects || {}; state.recent = state.recent || []; state.focusOn = state.focusOn || "";
+  delete state.tasks; delete state.activeId;
+  const saveLocal = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+
+  const totalSec = p => Object.values(p.days || {}).reduce((a, b) => a + b, 0);
+  const secBetween = (p, startKey, endKey) => Object.entries(p.days || {}).reduce((a, [k, v]) => k >= startKey && k <= endKey ? a + v : a, 0);
+
+  // ---------- Shared store (db + user), optional ----------
+  let db = null, user = null, myId = null, canWrite = true;
+  let players = {};   // id -> player record (includes me)
+  let comps = {};     // creatorId -> competition record
+  let profiles = {};
+  let reviews = {};   // reviewerId -> review
+
+  function playerRecord() {
+    const m = state.me;
+    return { code: m.code, name: m.name, days: m.days, blocks: m.blocks, friends: m.friends, removed: m.removed, ms: m.ms, updatedAt: Date.now() };
+  }
+
+  // One write at a time to my player doc; coalesce bursts.
+  let writing = false, dirty = false;
+  async function pushMe() {
+    saveLocal();
+    if (!db || !myId || !canWrite) return;
+    if (writing) { dirty = true; return; }
+    writing = true;
+    try {
+      do { dirty = false; await db.doc("players/" + myId).set(playerRecord()); } while (dirty);
+      setSync("Synced with friends");
+    } catch (e) {
+      if (e && e.code === "invalid_argument") { canWrite = false; setSync("View only"); renderFriends(); }
+      else setSync("Couldn't sync, will retry");
+    }
+    writing = false;
+  }
+  const setSync = t => { $("sync-state").textContent = t; };
+
+  function mergeRemote(r) {
+    // Take the larger of local and remote for each day, so nothing focused is lost.
+    const m = state.me;
+    for (const [k, v] of Object.entries(r.days || {})) m.days[k] = Math.max(m.days[k] || 0, v);
+    for (const [k, v] of Object.entries(r.blocks || {})) m.blocks[k] = Math.max(m.blocks[k] || 0, v);
+    for (const [k, v] of Object.entries(r.ms || {})) if (!m.ms[k] || v < m.ms[k]) m.ms[k] = v;
+    if (r.code) m.code = r.code;
+    if (r.name && !m.name) m.name = r.name;
+    m.friends = [...new Set([...(r.friends || []), ...m.friends])];
+    m.removed = [...new Set([...(r.removed || []), ...m.removed])];
+  }
+
+  async function connect() {
+    if (NET) {
+      initGoogle();
+      if (!netToken()) return showOffline();
+      let me; try { me = await api("GET", "me"); } catch (e) { return showOffline(); }
+      db = netDb(); user = netUser(me); showNetUser(me);
+    } else {
+      if (!window.claude || !window.claude.use) return showOffline();
+      try { [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]); } catch (e) {}
+    }
+    myId = user ? await user.id() : null;
+    if (!db || !myId) { db = null; return showOffline(); }
+    isOwner = await user.isOwner();
+    const w = await user.can("data.write");
+    if (w === false) canWrite = false;
+
+    const mine = await db.doc("players/" + myId).get().catch(() => null);
+    if (mine && mine.exists) mergeRemote(mine.data());
+    else {
+      // make sure the new code isn't taken
+      try { const hit = await db.collection("players").where("code", "==", state.me.code).limit(1).get(); if (!hit.empty) state.me.code = newCode(); } catch (e) {}
+    }
+    if (!state.me.name) { const me = await user.me(); if (me.name) state.me.name = me.name.split(" ")[0]; }
+    await acceptInvite();
+    $("offline-note").hidden = canWrite;
+    if (!canWrite) $("offline-note").innerHTML = "<b>View only.</b> You can see the leaderboard, but your minutes won't be shared. Ask the owner to give you edit access.";
+    await pushMe();
+
+    db.collection("players").onSnapshot(snap => {
+      players = {};
+      snap.docs.forEach(d => { players[d.id] = d.data(); });
+      players[myId] = Object.assign({}, players[myId] || {}, playerRecord());
+      renderAll();
+    }, () => {});
+    db.collection("comps").onSnapshot(snap => {
+      comps = {};
+      snap.docs.forEach(d => { comps[d.id] = d.data(); });
+      renderAll();
+    }, () => {});
+    db.collection("reviews").onSnapshot(snap => {
+      reviews = {};
+      snap.docs.forEach(d => { reviews[d.id] = d.data(); });
+      if (view === "reviews") renderReviews();
+    }, () => {});
+    renderAll();
+  }
+  function showOffline() {
+    const n = $("offline-note");
+    n.hidden = false;
+    n.innerHTML = NET
+      ? "<b>Sign in to see your friends.</b> Sign in with your Gmail on the <a href=\"#about\">About</a> page to invite friends and see the leaderboard. Your timer and progress still save on this device."
+      : "<b>Friends need a signed-in view.</b> Open Focus Stem in Claude while signed in to invite friends and see the leaderboard. Your timer and progress still save on this device.";
+    renderAll();
+  }
+
+  // ---------- Hosted site: Google sign-in + Netlify storage ----------
+  // The API mirrors the Claude db: everyone signed in reads players, comps and reviews; each person writes only their own doc.
+  const TOKEN_KEY = "stem-gtoken";
+  function netToken() {
+    try {
+      const t = localStorage.getItem(TOKEN_KEY); if (!t) return null;
+      const exp = JSON.parse(atob(t.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).exp;
+      return exp * 1000 > Date.now() + 60000 ? t : null;
+    } catch (e) { return null; }
+  }
+  async function api(method, path, body) {
+    const headers = { authorization: "Bearer " + netToken() };
+    if (body !== undefined) headers["content-type"] = "application/json";
+    const r = await fetch("/api/" + path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
+    if (r.status === 401) { try { localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+    if (!r.ok) throw Object.assign(new Error("api " + r.status), { code: r.status === 403 ? "permission_denied" : "unavailable" });
+    return r.json();
+  }
+  function netDb() {
+    const snap = docs => { const list = Object.entries(docs).map(([id, v]) => ({ id, exists: true, data: () => v })); return { docs: list, size: list.length, empty: !list.length }; };
+    const watchers = {};
+    const refresh = async coll => {
+      const w = watchers[coll]; if (!w) return;
+      try { const r = await api("GET", "c/" + coll); w.forEach(([fn]) => fn(snap(r.docs))); } catch (e) { w.forEach(([, err]) => err && err(e)); }
+    };
+    setInterval(() => { if (!document.hidden) Object.keys(watchers).forEach(refresh); }, 20000);
+    const doc = path => {
+      const [coll, id] = path.split("/"), url = "d/" + coll + "/" + encodeURIComponent(id);
+      return {
+        get: async () => { const r = await api("GET", url); return { exists: r.exists, data: () => r.data }; },
+        set: async v => { await api("PUT", url, v); if (coll !== "players") refresh(coll); },
+        delete: async () => { await api("DELETE", url); refresh(coll); }
+      };
+    };
+    const none = { limit: () => none, get: async () => snap({}) };
+    return { doc, collection: coll => ({ where: () => none, onSnapshot: (fn, err) => { (watchers[coll] = watchers[coll] || []).push([fn, err]); refresh(coll); return () => {}; } }) };
+  }
+  function netUser(me) {
+    let cache = null, at = 0;
+    return {
+      id: async () => me.id, isOwner: async () => !!me.isOwner, can: async () => true, me: async () => ({ name: me.name }),
+      profiles: async ids => {
+        if (!cache || Date.now() - at > 60000) { cache = (await api("GET", "c/profiles")).docs; at = Date.now(); }
+        return Object.fromEntries([].concat(ids).map(i => [i, cache[i] || { name: "", avatarUrl: "" }]));
+      }
+    };
+  }
+  function initGoogle() {
+    $("gsignin").hidden = false;
+    if (joinFrom) $("gsignin-text").textContent = "A friend invited you to Focus Stem. Sign in with your Gmail to join them.";
+    if (!GOOGLE_CLIENT_ID) { $("gsignin-text").textContent = "Gmail sign-in turns on once the Google client ID is added."; return; }
+    if (netToken()) return;
+    const sc = document.createElement("script"); sc.src = "https://accounts.google.com/gsi/client"; sc.async = true;
+    sc.onload = () => {
+      google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, auto_select: true, callback: r => {
+        try { localStorage.setItem(TOKEN_KEY, r.credential); } catch (e) {}
+        location.reload();
+      } });
+      google.accounts.id.renderButton($("gsignin-btn"), { theme: "outline", size: "large", shape: "pill", text: "signin_with" });
+      google.accounts.id.prompt();
+    };
+    document.head.appendChild(sc);
+  }
+  function showNetUser(me) {
+    $("gsignin-text").hidden = true; $("gsignin-btn").hidden = true; $("gsignin-me").hidden = false;
+    $("gsignin-name").textContent = me.name || "you";
+  }
+  $("gsignin-friends").addEventListener("click", () => showView("friends"));
+  $("gsignin-out").addEventListener("click", () => {
+    try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+    try { google.accounts.id.disableAutoSelect(); } catch (e) {}
+    location.reload();
+  });
+
+  // ---------- Reviews ----------
+  // One review per person at reviews/<their id>; everyone reads them, only the author (or the owner) can change one.
+  const STAR = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg>';
+  const STAR_WORDS = ["", "Not for me", "Needs work", "It's okay", "Really good", "Love it"];
+  const starsHtml = n => Array.from({ length: 5 }, (_, i) => i < Math.round(n) ? STAR : STAR.replace('<svg', '<svg class="off"')).join("");
+  let rvStars = 0, rvSort = "new", rvLoaded = false, isOwner = false;
+  const pick = $("star-pick");
+  for (let i = 1; i <= 5; i++) {
+    const b = document.createElement("button"); b.type = "button"; b.innerHTML = STAR; b.dataset.v = i;
+    b.setAttribute("role", "radio"); b.setAttribute("aria-label", i + (i === 1 ? " star" : " stars"));
+    b.addEventListener("click", () => { rvStars = i; paintPick(i); });
+    b.addEventListener("mouseenter", () => paintPick(i, true));
+    pick.appendChild(b);
+  }
+  pick.addEventListener("mouseleave", () => paintPick(rvStars));
+  function paintPick(n, preview) {
+    [...pick.children].forEach((b, i) => { b.classList.toggle("lit", i < n); b.setAttribute("aria-checked", String(i + 1 === rvStars)); });
+    $("star-hint").textContent = n ? n + " of 5 · " + STAR_WORDS[n] : "Tap a star to rate";
+  }
+  $("rv-text").addEventListener("input", e => { $("rv-chars").textContent = e.target.value.length + " / 800"; });
+  document.querySelectorAll("#rv-sort button").forEach(b => b.addEventListener("click", () => {
+    rvSort = b.dataset.sort; document.querySelectorAll("#rv-sort button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderReviews();
+  }));
+  function rvSay(t, ok) { const m = $("rv-msg"); m.className = "form-msg " + (ok ? "ok" : "err"); m.textContent = t; }
+  $("rv-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!db || !myId) return rvSay("Posting a review needs a signed-in view.");
+    if (!canWrite) return rvSay("You have view-only access, so you can't post a review.");
+    if (!rvStars) return rvSay("Pick a star rating first.");
+    const text = $("rv-text").value.trim().slice(0, 800);
+    const prev = reviews[myId];
+    const rec = { stars: rvStars, text, name: state.me.name || "", createdAt: prev && prev.createdAt || Date.now(), updatedAt: Date.now() };
+    $("rv-submit").disabled = true;
+    try { await db.doc("reviews/" + myId).set(rec); reviews[myId] = rec; rvSay(prev ? "Review updated. Thanks!" : "Thanks for your review!", true); renderReviews(); }
+    catch (err) { rvSay("Couldn't post it. Check your connection and try again."); }
+    $("rv-submit").disabled = false;
+  });
+  $("rv-delete").addEventListener("click", () => removeReview(myId));
+  async function removeReview(id) {
+    try { await db.doc("reviews/" + id).delete(); delete reviews[id]; if (id === myId) { rvStars = 0; rvLoaded = false; $("rv-text").value = ""; } toast("Review removed"); renderReviews(); }
+    catch (e) { toast("Couldn't remove it. Try again."); }
+  }
+  async function renderReviews() {
+    const list = Object.entries(reviews).filter(([, r]) => r && r.stars >= 1 && r.stars <= 5);
+    const n = list.length, avg = n ? list.reduce((a, [, r]) => a + r.stars, 0) / n : 0;
+    $("rv-avg").textContent = n ? avg.toFixed(1) : "–";
+    $("rv-avg-stars").innerHTML = starsHtml(avg);
+    $("rv-count").textContent = n ? "From " + n + (n === 1 ? " review" : " reviews") : (myId ? "No reviews yet. Be the first." : "Reviews show up once you open Stem signed in.");
+    const dist = $("rv-dist"); dist.innerHTML = "";
+    for (let st = 5; st >= 1; st--) {
+      const c = list.filter(([, r]) => r.stars === st).length;
+      const row = document.createElement("div"); row.className = "dist-row";
+      row.innerHTML = '<span></span><div class="bar-track"><div></div></div><span></span>';
+      row.firstChild.textContent = st + " star"; row.querySelector(".bar-track > div").style.width = (n ? c / n * 100 : 0) + "%"; row.lastChild.textContent = c;
+      dist.appendChild(row);
+    }
+    // form reflects my existing review
+    const mine = myId && reviews[myId];
+    if (mine && !rvLoaded) { rvStars = mine.stars; $("rv-text").value = mine.text || ""; $("rv-chars").textContent = (mine.text || "").length + " / 800"; rvLoaded = true; }
+    paintPick(rvStars);
+    $("rv-form-title").textContent = mine ? "Your review" : "Rate Focus Stem";
+    $("rv-submit").textContent = mine ? "Update review" : "Post review";
+    $("rv-delete").hidden = !mine;
+    $("rv-submit").disabled = !myId || !canWrite;
+
+    const sorted = list.sort((a, b) => rvSort === "high" ? b[1].stars - a[1].stars || b[1].updatedAt - a[1].updatedAt
+      : rvSort === "low" ? a[1].stars - b[1].stars || b[1].updatedAt - a[1].updatedAt : b[1].updatedAt - a[1].updatedAt);
+    if (user && sorted.length) { try { Object.assign(profiles, await user.profiles(sorted.map(([id]) => id))); } catch (e) {} }
+    const ul = $("rv-list"); ul.innerHTML = "";
+    if (!sorted.length) { const li = document.createElement("li"); li.className = "empty"; li.style.display = "block"; li.textContent = myId ? "No reviews yet. Rate Focus Stem to start the list." : "Open Focus Stem signed in to read and write reviews."; ul.appendChild(li); return; }
+    sorted.forEach(([id, r], i) => {
+      const li = document.createElement("li"); if (id === myId) li.className = "mine"; li.style.setProperty("--i", Math.min(i, 10));
+      li.innerHTML = '<div class="rv-head"><span class="stars"></span><b></b><time></time></div>';
+      li.querySelector(".stars").innerHTML = starsHtml(r.stars);
+      li.querySelector(".stars").setAttribute("aria-label", r.stars + " out of 5 stars");
+      const who = li.querySelector("b"); who.textContent = r.name || (profiles[id] && profiles[id].name) || "A student";
+      if (id === myId) { const s = document.createElement("span"); s.className = "muted"; s.style.fontWeight = "400"; s.textContent = " (you)"; who.appendChild(s); }
+      li.querySelector("time").textContent = new Date(r.updatedAt || r.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) + (r.updatedAt && r.createdAt && r.updatedAt - r.createdAt > 60000 ? " · edited" : "");
+      if (r.text) { const p = document.createElement("p"); p.className = "rv-text"; p.textContent = r.text; li.appendChild(p); }
+      if (isOwner && id !== myId) {
+        const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.style.justifySelf = "start"; b.textContent = "Remove";
+        b.addEventListener("click", () => removeReview(id)); li.appendChild(b);
+      }
+      ul.appendChild(li);
+    });
+  }
+
+  // ---------- Friends model ----------
+  // Friendship is mutual: either side listing the other counts, unless either removed it.
+  function friendIds() {
+    if (!myId) return [];
+    const me = state.me, out = new Set(me.friends);
+    for (const [id, p] of Object.entries(players)) if (id !== myId && (p.friends || []).includes(myId)) out.add(id);
+    for (const id of [...out]) {
+      const p = players[id];
+      if (me.removed.includes(id) || (p && (p.removed || []).includes(myId)) || !p) out.delete(id);
+    }
+    return [...out];
+  }
+  function friendCountOf(id) {
+    const p = players[id]; if (!p) return 0;
+    const out = new Set(p.friends || []);
+    for (const [oid, o] of Object.entries(players)) if (oid !== id && (o.friends || []).includes(id)) out.add(oid);
+    return out.size;
+  }
+
+  // ---------- Competitions ----------
+  // One live competition per creator, stored at comps/<creatorId>; finished ones move into its history.
+  function compStandings(c) {
+    const startKey = dayKey(new Date(c.startAt)), endKey = dayKey(new Date(c.endAt - 1));
+    return (c.members || []).filter(id => players[id]).map(id => ({ id, sec: secBetween(players[id], startKey, endKey) })).sort((a, b) => b.sec - a.sec);
+  }
+  function winnersOf(c) {
+    const s = compStandings(c);
+    if (!s.length || s[0].sec < 60) return [];
+    return s.filter(x => x.sec === s[0].sec).map(x => x.id);
+  }
+  function allFinished() {
+    const out = [];
+    for (const [cid, c] of Object.entries(comps)) {
+      for (const h of c.history || []) out.push(Object.assign({ creator: cid }, h));
+      if (c.endAt && c.endAt <= Date.now()) out.push(Object.assign({ creator: cid, winners: winnersOf(c) }, c));
+    }
+    return out;
+  }
+  const myComps = () => Object.entries(comps).filter(([, c]) => (c.members || []).includes(myId)).map(([cid, c]) => Object.assign({ creator: cid }, c));
+
+  async function startComp(name, days) {
+    const msg = $("comp-msg");
+    if (!db || !myId || !canWrite) { msg.className = "form-msg err"; msg.textContent = "Competitions need a signed-in view with edit access."; return; }
+    const friends = friendIds();
+    if (!friends.length) { msg.className = "form-msg err"; msg.textContent = "Add at least one friend first."; return; }
+    const cur = comps[myId];
+    if (cur && cur.endAt > Date.now()) { msg.className = "form-msg err"; msg.textContent = "You already have a competition running."; return; }
+    const history = cur ? (cur.history || []).slice(-20) : [];
+    if (cur && cur.endAt <= Date.now()) history.push({ name: cur.name, days: cur.days, startAt: cur.startAt, endAt: cur.endAt, members: cur.members, winners: winnersOf(cur) });
+    const start = new Date(); start.setHours(0, 0, 0, 0);
+    const rec = { name: name || days + "-day challenge", days, startAt: start.getTime(), endAt: start.getTime() + days * 86400000, members: [myId, ...friends], history, createdAt: Date.now() };
+    try { await db.doc("comps/" + myId).set(rec); msg.className = "form-msg ok"; msg.textContent = "Started. You and " + friends.length + (friends.length === 1 ? " friend are" : " friends are") + " in."; $("comp-name").value = ""; }
+    catch (e) { msg.className = "form-msg err"; msg.textContent = "Couldn't start it. Check your connection and try again."; }
+  }
+  async function endCompEarly() {
+    const cur = comps[myId]; if (!cur) return;
+    const rec = Object.assign({}, cur, { endAt: Math.min(cur.endAt, Date.now()) });
+    try { await db.doc("comps/" + myId).set(rec); toast("Competition ended"); } catch (e) { toast("Couldn't end it. Try again."); }
+  }
+
+  // ---------- Timer ----------
+  const LABELS = { focus: "Focus", short: "Short break", long: "Long break" };
+  let mode = "focus", total = state.settings.focus * 60, remaining = total, endAt = null, tickHandle = null, wakeLock = null;
+  let lastCredit = null, lastPush = 0;
+
+  // 60 ticks clockwise from 12. Lit ticks are the time left; the dot rides the boundary.
+  const ticks = [];
+  for (let i = 0; i < 60; i++) {
+    const a = (i / 60) * 2 * Math.PI - Math.PI / 2, quarter = i % 15 === 0, five = i % 5 === 0;
+    const r1 = 100, r2 = quarter ? 80 : five ? 86 : 91;
+    const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    l.setAttribute("x1", 110 + r1 * Math.cos(a)); l.setAttribute("y1", 110 + r1 * Math.sin(a));
+    l.setAttribute("x2", 110 + r2 * Math.cos(a)); l.setAttribute("y2", 110 + r2 * Math.sin(a));
+    l.setAttribute("stroke-width", quarter ? 3.2 : five ? 2.8 : 2.2);
+    $("ticks").appendChild(l); ticks.push(l);
+  }
+  function renderFace() {
+    const elapsed = total ? 1 - remaining / total : 0;
+    const cut = Math.floor(elapsed * 60 + 1e-6);
+    ticks.forEach((l, i) => l.classList.toggle("on", i >= cut));
+    const a = elapsed * 2 * Math.PI - Math.PI / 2;
+    $("hand").setAttribute("cx", 110 + 74 * Math.cos(a)); $("hand").setAttribute("cy", 110 + 74 * Math.sin(a));
+  }
+  const clock = s => { s = Math.max(0, Math.ceil(s)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); };
+
+  // Add focused seconds to today's total (and to what you're focusing on) as they happen.
+  function credit() {
+    if (mode !== "focus" || lastCredit === null) return;
+    const now = Date.now(), add = Math.round((now - lastCredit) / 1000);
+    if (add <= 0) return;
+    lastCredit += add * 1000;
+    const k = dayKey();
+    state.me.days[k] = (state.me.days[k] || 0) + add;
+    if (state.focusOn) state.subjects[state.focusOn] = (state.subjects[state.focusOn] || 0) + add;
+    checkMilestones();
+    if (players[myId]) players[myId] = Object.assign({}, players[myId], playerRecord());
+  }
+  function checkMilestones() {
+    const t = mins(totalSec(state.me));
+    for (const [m, label] of MILESTONES) {
+      if (t >= m && !state.me.ms[m]) { state.me.ms[m] = Date.now(); toast("Milestone unlocked: " + label + " (" + nf.format(m) + " min)"); chime(); }
+    }
+  }
+
+  function renderTimer() {
+    $("time").textContent = clock(remaining);
+    renderFace();
+    $("mode-label").textContent = LABELS[mode];
+    document.body.classList.toggle("on-break", mode !== "focus");
+    const running = endAt !== null;
+    document.body.classList.toggle("running", running);
+    document.querySelectorAll(".modes button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+    $("start").textContent = running ? "Pause" : (remaining < total ? "Resume" : "Start");
+    document.title = running ? clock(remaining) + " · " + (mode === "focus" ? "Focus" : "Break") : "Focus Stem";
+    const now = $("now");
+    if (mode === "focus") { now.textContent = state.focusOn || "Ready when you are"; now.disabled = false; }
+    else { now.textContent = "Stretch, drink water, look away"; now.disabled = true; }
+    if (typeof syncMusic === "function") syncMusic();
+    const cyc = $("cycle"); cyc.innerHTML = "";
+    const every = state.settings.every, n = state.cycleCount % every;
+    for (let i = 0; i < every; i++) { const d = document.createElement("i"); if (i < n) d.className = "done"; cyc.appendChild(d); }
+    const lab = document.createElement("span"); lab.textContent = (every - n) + " until long break"; cyc.appendChild(lab);
+  }
+  function setMode(m, keepRunning = false) {
+    if (endAt !== null) credit();
+    mode = m; total = state.settings[m] * 60; remaining = total;
+    if (keepRunning) { endAt = Date.now() + remaining * 1000; lastCredit = Date.now(); } else stop();
+    renderTimer();
+  }
+  function tick() {
+    remaining = (endAt - Date.now()) / 1000;
+    credit();
+    if (remaining <= 0) { remaining = 0; finish(); return; }
+    renderTimer();
+    if (mode === "focus" && Date.now() - lastPush > 60000) { lastPush = Date.now(); pushMe(); if (view === "timer") renderToday(); }
+  }
+  async function start() {
+    endAt = Date.now() + remaining * 1000; lastCredit = Date.now(); lastPush = Date.now();
+    clearInterval(tickHandle); tickHandle = setInterval(tick, 250);
+    unlockAudio();
+    try { if ("wakeLock" in navigator) wakeLock = await navigator.wakeLock.request("screen"); } catch (e) {}
+    renderTimer();
+  }
+  function stop() {
+    if (endAt !== null) { credit(); remaining = Math.max(0, (endAt - Date.now()) / 1000); pushMe(); }
+    endAt = null; lastCredit = null; clearInterval(tickHandle);
+    try { wakeLock && wakeLock.release(); } catch (e) {} wakeLock = null;
+  }
+  function finish() {
+    const wasFocus = mode === "focus";
+    stop(); chime();
+    if (wasFocus) {
+      const k = dayKey();
+      state.me.blocks[k] = (state.me.blocks[k] || 0) + 1;
+      state.cycleCount += 1;
+      pushMe();
+      toast("Nice work. " + state.settings.focus + " minutes on " + (state.focusOn || "focus") + ".");
+      setMode(state.cycleCount % state.settings.every === 0 ? "long" : "short", state.settings.auto);
+    } else {
+      toast("Break's over. Ready for the next block?");
+      // after a break, ask again unless auto-start is on
+      setMode("focus", state.settings.auto && !!state.focusOn);
+    }
+    if (endAt !== null) { clearInterval(tickHandle); tickHandle = setInterval(tick, 250); }
+    renderAll();
+  }
+
+  // ---------- Focus prompt ----------
+  const fdlg = $("focus-dlg");
+  let promptStarts = true;
+  function askFocus(startAfter) {
+    promptStarts = startAfter;
+    $("focus-eyebrow").textContent = state.settings.focus + " minute focus block";
+    $("focus-go").textContent = startAfter ? "Start focusing" : "Save";
+    const inp = $("focus-what");
+    inp.value = startAfter ? "" : state.focusOn;
+    const chips = $("focus-chips"); chips.innerHTML = "";
+    state.recent.slice(0, 6).forEach(r => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = r;
+      b.addEventListener("click", () => { inp.value = r; inp.focus(); });
+      chips.appendChild(b);
+    });
+    fdlg.showModal ? fdlg.showModal() : fdlg.setAttribute("open", "");
+    setTimeout(() => inp.focus(), 30);
+  }
+  fdlg.addEventListener("close", () => {
+    if (fdlg.returnValue !== "go") return;
+    const what = $("focus-what").value.trim().slice(0, 80);
+    if (!what) return;
+    state.focusOn = what;
+    state.recent = [what, ...state.recent.filter(r => r.toLowerCase() !== what.toLowerCase())].slice(0, 12);
+    saveLocal();
+    if (promptStarts && endAt === null) { if (mode !== "focus") setMode("focus"); start(); }
+    renderTimer();
+  });
+
+  $("start").addEventListener("click", () => {
+    if (endAt !== null) { stop(); renderAll(); return; }
+    if (mode === "focus" && remaining >= total) askFocus(true);
+    else start();
+  });
+  $("now").addEventListener("click", () => { if (mode === "focus") askFocus(endAt === null && remaining >= total); });
+  $("reset").addEventListener("click", () => { stop(); remaining = total; renderAll(); });
+  $("skip").addEventListener("click", () => {
+    stop();
+    if (mode === "focus") setMode(state.cycleCount % state.settings.every === state.settings.every - 1 ? "long" : "short");
+    else setMode("focus");
+    renderAll();
+  });
+  // Switching modes mid-session asks first. Focused minutes are credited as they happen, so leaving keeps them.
+  const ldlg = $("leave-dlg");
+  let leaveTarget = null;
+  function switchMode(target) {
+    if (target === mode) return;
+    const inProgress = endAt !== null || remaining < total;
+    if (!inProgress) { setMode(target); renderAll(); return; }
+    leaveTarget = target;
+    const done = Math.floor((total - (endAt !== null ? (endAt - Date.now()) / 1000 : remaining)) / 60);
+    const to = LABELS[target].toLowerCase();
+    $("leave-title").textContent = mode === "focus" ? "Leave this focus session?" : "End your break early?";
+    $("leave-text").textContent = mode === "focus"
+      ? (done >= 1 ? "You've focused for " + done + (done === 1 ? " minute" : " minutes") + " this session. " : "") + "Anything you've focused is already saved to your total. The timer will switch to a " + to + "."
+      : "The timer will switch to a " + (target === "focus" ? "new focus block" : to) + ".";
+    $("leave-go").textContent = "Switch to " + (target === "focus" ? "focus" : to);
+    ldlg.showModal ? ldlg.showModal() : ldlg.setAttribute("open", "");
+  }
+  ldlg.addEventListener("close", () => {
+    if (ldlg.returnValue === "leave" && leaveTarget) { setMode(leaveTarget); renderAll(); if (mode === "focus") toast("Session ended. Your minutes are saved."); else toast("Minutes saved. Enjoy your break."); }
+    leaveTarget = null;
+  });
+  document.querySelectorAll(".modes button").forEach(b => b.addEventListener("click", () => switchMode(b.dataset.mode)));
+
+  // ---------- Sound ----------
+  let actx = null;
+  function unlockAudio() { try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); actx.resume(); } catch (e) {} }
+  function chime() {
+    if (!state.settings.sound || !actx) return;
+    try {
+      [660, 880, 1320].forEach((f, i) => {
+        const o = actx.createOscillator(), g = actx.createGain(), t0 = actx.currentTime + i * 0.18;
+        o.type = "sine"; o.frequency.value = f;
+        g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(0.18, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.9);
+        o.connect(g).connect(actx.destination); o.start(t0); o.stop(t0 + 1);
+      });
+    } catch (e) {}
+  }
+
+  // Switch click: a sharp contact snap, a tiny metallic spring ring and a short plastic body.
+  // Pressing plays the "down" click, releasing plays a lighter "up" click, like a real switch.
+  let noiseBuf = null;
+  function switchClick(phase, heavy) {
+    if (state.settings.clicks === false) return;
+    unlockAudio(); if (!actx) return;
+    try {
+      const t = actx.currentTime, up = phase === "up", out = actx.createGain();
+      out.gain.value = (heavy ? 0.42 : 0.34) * (up ? 0.55 : 1); out.connect(actx.destination);
+      if (!noiseBuf) {
+        noiseBuf = actx.createBuffer(1, Math.floor(actx.sampleRate * 0.02), actx.sampleRate);
+        const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 6);
+      }
+      const n = actx.createBufferSource(); n.buffer = noiseBuf;
+      const bp = actx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = up ? 4200 : 3300; bp.Q.value = 1.4;
+      const ng = actx.createGain(); ng.gain.setValueAtTime(1.2, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.012);
+      n.connect(bp).connect(ng).connect(out); n.start(t);
+      const ring = actx.createOscillator(), rg = actx.createGain();
+      ring.type = "triangle"; ring.frequency.value = up ? 2900 : 2300;
+      rg.gain.setValueAtTime(0.0001, t); rg.gain.exponentialRampToValueAtTime(0.12, t + 0.002); rg.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
+      ring.connect(rg).connect(out); ring.start(t); ring.stop(t + 0.04);
+      const body = actx.createOscillator(), bg = actx.createGain();
+      body.type = "sine"; body.frequency.setValueAtTime(heavy ? 520 : 650, t); body.frequency.exponentialRampToValueAtTime(heavy ? 300 : 380, t + 0.02);
+      bg.gain.setValueAtTime(0.0001, t); bg.gain.exponentialRampToValueAtTime(up ? 0.2 : 0.45, t + 0.002); bg.gain.exponentialRampToValueAtTime(0.0001, t + 0.025);
+      body.connect(bg).connect(out); body.start(t); body.stop(t + 0.03);
+    } catch (e) {}
+  }
+  const SOUND_TARGETS = "button, [role=tab], input[type=checkbox], select";
+  let pressed = null;
+  document.addEventListener("pointerdown", e => {
+    const el = e.target.closest(SOUND_TARGETS);
+    if (el && !el.disabled) { pressed = el; switchClick("down", el.classList.contains("primary")); }
+  });
+  document.addEventListener("pointerup", () => {
+    if (pressed) { switchClick("up", pressed.classList.contains("primary")); pressed = null; }
+  });
+  document.addEventListener("pointercancel", () => { pressed = null; });
+  document.addEventListener("keydown", e => {
+    if (e.repeat || !(e.key === "Enter" || e.key === " ") || !e.target.closest || !e.target.closest("button")) return;
+    const heavy = e.target.classList.contains("primary");
+    switchClick("down", heavy); setTimeout(() => switchClick("up", heavy), 70);
+  });
+
+  // ---------- Study music (generated with Web Audio, nothing is downloaded) ----------
+  const STATIONS = {
+    rise: "Cozy 75 BPM boom-bap that builds into 120 BPM lofi house",
+    lofi: "Jazzy piano and fingerpicked guitar over vinyl crackle",
+    rain: "Piano and guitar with rain on the window",
+    night: "Slower and sparser, for late sessions"
+  };
+  const music = { on: false, station: state.settings.musicV2 ? (state.settings.station || "rise") : "rise", vol: state.settings.musicVol ?? 60, auto: !!state.settings.musicAuto,
+    bus: null, nodes: [], timer: null, nextTime: 0, step: 0, playing: false };
+  if (!["rise", "lofi", "rain", "night"].includes(music.station)) music.station = "rise";
+  const midi = n => 440 * Math.pow(2, (n - 69) / 12);
+  function noiseBuffer(seconds, shape) {
+    const len = Math.floor(actx.sampleRate * seconds), b = actx.createBuffer(1, len, actx.sampleRate), d = b.getChannelData(0);
+    let last = 0;
+    for (let i = 0; i < len; i++) {
+      const w = Math.random() * 2 - 1;
+      if (shape === "brown") { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w;
+    }
+    return b;
+  }
+  function reverb(seconds) {
+    const len = Math.floor(actx.sampleRate * seconds), b = actx.createBuffer(2, len, actx.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.5); }
+    const cv = actx.createConvolver(); cv.buffer = b; return cv;
+  }
+  function buildBus() {
+    const master = actx.createGain(); master.gain.value = 0;
+    const tone = actx.createBiquadFilter(); tone.type = "lowpass"; tone.frequency.value = 2600;
+    const wet = actx.createGain(); wet.gain.value = 0.35; const rv = reverb(3.2);
+    tone.connect(master); tone.connect(rv); rv.connect(wet); wet.connect(master); master.connect(actx.destination);
+    // Drums get their own filter so the bridge can sweep them out and back in.
+    const drumIn = actx.createGain(), drumLP = actx.createBiquadFilter(), drumOut = actx.createGain();
+    drumLP.type = "lowpass"; drumLP.frequency.value = 9000; drumLP.Q.value = 0.9;
+    drumIn.connect(drumLP).connect(drumOut).connect(master);
+    return { master, input: tone, drums: drumIn, drumLP, drumOut };
+  }
+  // Piano: a few decaying harmonics with a soft hammer attack; higher notes ring shorter.
+  function piano(n, t, vel, dur) {
+    const f = actx.createBiquadFilter(); f.type = "lowpass";
+    f.frequency.setValueAtTime(3200, t); f.frequency.exponentialRampToValueAtTime(900, t + dur);
+    const g = actx.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vel, t + 0.006); g.gain.exponentialRampToValueAtTime(vel * 0.35, t + 0.25); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    [[1, 1], [2, 0.45], [3, 0.18], [4, 0.08]].forEach(([h, amp]) => {
+      const o = actx.createOscillator(); o.type = "sine"; o.frequency.value = midi(n) * h; o.detune.value = (Math.random() - 0.5) * 4;
+      const og = actx.createGain(); og.gain.value = amp; o.connect(og).connect(f); o.start(t); o.stop(t + dur + 0.05);
+    });
+    f.connect(g).connect(music.bus.input);
+  }
+  // Guitar: Karplus-Strong plucked string, rendered once per note and cached.
+  const guitarCache = {};
+  function guitarBuf(n) {
+    if (guitarCache[n]) return guitarCache[n];
+    const sr = actx.sampleRate, N = Math.max(2, Math.round(sr / midi(n))), len = Math.floor(sr * 2.2);
+    const b = actx.createBuffer(1, len, sr), d = b.getChannelData(0), ring = new Float32Array(N);
+    for (let i = 0; i < N; i++) ring[i] = Math.random() * 2 - 1;
+    for (let i = 1; i < N; i++) ring[i] = (ring[i] + ring[i - 1]) * 0.5; // softer pick
+    for (let i = 0; i < len; i++) { const j = i % N, k = (j + 1) % N; d[i] = ring[j]; ring[j] = 0.4985 * (ring[j] + ring[k]); }
+    return (guitarCache[n] = b);
+  }
+  function guitar(n, t, vel, pan) {
+    const src = actx.createBufferSource(); src.buffer = guitarBuf(n);
+    const f = actx.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 2800;
+    const g = actx.createGain(); g.gain.setValueAtTime(vel, t); g.gain.setTargetAtTime(0.0001, t + 1.4, 0.3);
+    const p = actx.createStereoPanner ? actx.createStereoPanner() : null;
+    src.connect(f).connect(g); if (p) { p.pan.value = pan; g.connect(p).connect(music.bus.input); } else g.connect(music.bus.input);
+    src.start(t); src.stop(t + 2.2);
+  }
+  // Fmaj7 – Em7 – Dm7 – Cmaj7 (and a softer variation), two bars each.
+  const CHORDS = [[53, [64, 69, 72, 76]], [52, [62, 67, 71, 74]], [50, [60, 65, 69, 72]], [48, [59, 64, 67, 71]],
+                  [46, [62, 65, 69, 72]], [45, [60, 64, 67, 71]], [50, [60, 65, 69, 72]], [43, [59, 62, 65, 69]]];
+  const PICK = [0, 2, 3, 1, 4, 2, 3, 1]; // fingerpicking order: bass, then chord tones
+  function scheduleLofi(t, step, night) {
+    const s16 = step % 32, chord = CHORDS[Math.floor(step / 32) % CHORDS.length];
+    const root = chord[0], tones = chord[1];
+    // Piano: rolled chord at the top of each bar, a bass note, and a light melody on top.
+    if (s16 === 0 || s16 === 16) {
+      tones.forEach((n, i) => piano(n, t + i * 0.025, s16 === 0 ? 0.06 : 0.04, 2.8));
+      piano(root, t, 0.11, 2.4);
+    }
+    if (s16 % 4 === 2 && Math.random() < (night ? 0.18 : 0.35)) piano(tones[Math.floor(Math.random() * 4)] + 12, t, 0.045, 1.4);
+    // Guitar: fingerpicked eighths (quarters for late night).
+    if (s16 % (night ? 4 : 2) === 0) {
+      const i = PICK[(s16 / 2) % 8], n = i === 0 ? root + 12 : tones[i - 1] - 12;
+      guitar(n, t, i === 0 ? 0.32 : 0.22, i === 0 ? -0.15 : 0.25);
+    }
+  }
+  // ---------- "Slow to fast": a scripted track ----------
+  // 0:00 cozy 75 BPM boom-bap · 0:45 bridge, drums filter out, bassline builds · 1:00–1:22 tempo climbs to 120 · then lofi house · loops at 3:20.
+  const RISE = { bridge: 45, accel: 60, house: 82, loop: 200 };
+  function riseBpm(ts) {
+    if (ts < RISE.accel) return 75;
+    if (ts >= RISE.house) return 120;
+    const p = (ts - RISE.accel) / (RISE.house - RISE.accel);
+    return 75 + 45 * (p * p * (3 - 2 * p)); // smoothstep, so the speed-up eases in and out
+  }
+  function riseSection(ts) { return ts < RISE.bridge ? "intro" : ts < RISE.accel ? "bridge" : ts < RISE.house ? "accel" : "house"; }
+  // Dusty Rhodes: a sine tine, a soft octave and a short bell partial, with a little tape wobble.
+  function rhodes(n, t, vel, dur) {
+    const f = actx.createBiquadFilter(); f.type = "lowpass"; f.frequency.setValueAtTime(2200, t); f.frequency.exponentialRampToValueAtTime(800, t + dur);
+    const g = actx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vel, t + 0.012); g.gain.exponentialRampToValueAtTime(vel * 0.4, t + 0.4); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    const wob = (Math.random() - 0.5) * 10;
+    [[1, 1, dur], [2, 0.22, dur], [7.1, 0.08, 0.12]].forEach(([h, amp, d]) => {
+      const o = actx.createOscillator(); o.type = "sine"; o.frequency.value = midi(n) * h; o.detune.value = wob;
+      const og = actx.createGain(); og.gain.setValueAtTime(amp, t); if (d < dur) og.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(og).connect(f); o.start(t); o.stop(t + dur + 0.05);
+    });
+    f.connect(g).connect(music.bus.input);
+  }
+  function bass(n, t, vel, dur) {
+    const f = actx.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 520;
+    const g = actx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vel, t + 0.015); g.gain.setTargetAtTime(0.0001, t + dur * 0.6, dur * 0.25);
+    [["triangle", 1, 1], ["sine", 0.5, 0.8]].forEach(([type, ratio, amp]) => {
+      const o = actx.createOscillator(); o.type = type; o.frequency.value = midi(n) * ratio;
+      const og = actx.createGain(); og.gain.value = amp; o.connect(og).connect(f); o.start(t); o.stop(t + dur + 0.3);
+    });
+    f.connect(g).connect(music.bus.master);
+  }
+  function drum(kind, t, vel) {
+    const g = actx.createGain(); g.connect(music.bus.drums);
+    if (kind === "kick") {
+      const o = actx.createOscillator(); o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.12);
+      g.gain.setValueAtTime(vel, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35); o.connect(g); o.start(t); o.stop(t + 0.37);
+      return;
+    }
+    const spec = { snare: ["bandpass", 1900, 0.18], clap: ["bandpass", 1300, 0.12], hat: ["highpass", 7500, 0.04], open: ["highpass", 6500, 0.22], shaker: ["highpass", 9000, 0.03] }[kind];
+    const n = actx.createBufferSource(); n.buffer = music.noise;
+    const f = actx.createBiquadFilter(); f.type = spec[0]; f.frequency.value = spec[1];
+    if (kind === "clap") { // three quick slaps
+      g.gain.setValueAtTime(0.0001, t);
+      [0, 0.011, 0.022].forEach(o => { g.gain.setValueAtTime(vel, t + o); g.gain.exponentialRampToValueAtTime(vel * 0.2, t + o + 0.009); });
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.022 + spec[2]);
+    } else { g.gain.setValueAtTime(vel, t); g.gain.exponentialRampToValueAtTime(0.0001, t + spec[2]); }
+    n.connect(f).connect(g); n.start(t, Math.random()); n.stop(t + spec[2] + 0.05);
+    if (kind === "snare") { // body of the snare
+      const o = actx.createOscillator(), og = actx.createGain(); o.frequency.value = 190;
+      og.gain.setValueAtTime(vel * 0.8, t); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.08); o.connect(og).connect(music.bus.drums); o.start(t); o.stop(t + 0.1);
+    }
+  }
+  const BASSLINE = [0, 0, 7, 12, 10, 7, 5, 7]; // eighth-note steps over each chord root
+  function scheduleRise(t, step, ts) {
+    const sec = riseSection(ts), s16 = step % 32, b = s16 % 16;
+    const chord = CHORDS[Math.floor(step / 32) % CHORDS.length], root = chord[0], tones = chord[1];
+    if (sec === "intro" || sec === "bridge" || sec === "accel") {
+      // Lazy Rhodes loop: rolled chord each bar, a pickup on the "and" of 3.
+      if (b === 0) tones.forEach((n, i) => rhodes(n, t + i * 0.03, 0.055, 3.2));
+      if (b === 10) rhodes(tones[2] + 12, t, 0.035, 1.2);
+      if (b === 14 && Math.random() < 0.4) rhodes(tones[3] + 12, t, 0.03, 0.9);
+    }
+    if (sec === "intro" || sec === "bridge" || (sec === "accel" && ts < 72)) {
+      // Boom-bap: kick on 1 and the "and" of 2, snare on 2 and 4, swung hats.
+      if (b === 0 || b === 7 || b === 10) drum("kick", t, b === 7 ? 0.45 : 0.75);
+      if (b === 4 || b === 12) drum("snare", t, 0.22);
+      if (b % 2 === 0) drum("hat", t, b % 4 === 0 ? 0.07 : 0.045);
+    }
+    if (sec !== "intro") {
+      // Mellow bassline from the bridge onward; in house it pumps on the off-beats.
+      if (sec === "house") { if (b % 4 === 2) bass(root - 12 + (b === 14 ? 12 : 0), t, 0.5, 0.22); if (b === 11) bass(root - 12 + 7, t, 0.35, 0.15); }
+      else if (b % 2 === 0) bass(root - 12 + BASSLINE[b / 2], t, sec === "bridge" ? 0.28 + 0.15 * ((ts - RISE.bridge) / (RISE.accel - RISE.bridge)) : 0.42, 0.4);
+    }
+    if (sec === "house" || (sec === "accel" && ts >= 72)) {
+      // Lofi house: four on the floor, claps on 2 and 4, open hats on the off-beats, syncopated shaker and Rhodes stabs.
+      if (b % 4 === 0) drum("kick", t, 0.8);
+      if (b === 4 || b === 12) drum("clap", t, 0.28);
+      if (b % 4 === 2) drum("open", t, 0.06);
+      if (b % 2 === 1 || b === 6) drum("shaker", t, b % 4 === 3 ? 0.05 : 0.03);
+      if ([0, 3, 6, 10, 13].includes(b)) tones.forEach((n, i) => rhodes(n, t + i * 0.008, b === 0 ? 0.05 : 0.038, b === 0 ? 1.4 : 0.45));
+      if (b === 8 && Math.random() < 0.5) rhodes(tones[Math.floor(Math.random() * 4)] + 12, t, 0.03, 0.8);
+    }
+  }
+  // Filter and label changes at each section boundary.
+  function riseTransition(sec, at) {
+    const lp = music.bus.drumLP.frequency, dg = music.bus.drumOut.gain;
+    if (sec === "intro") { lp.cancelScheduledValues(at); lp.setValueAtTime(9000, at); dg.cancelScheduledValues(at); dg.setValueAtTime(1, at); }
+    if (sec === "bridge") { lp.setTargetAtTime(220, at, 1.6); dg.setTargetAtTime(0.35, at, 2.5); }
+    if (sec === "accel") { lp.setTargetAtTime(9000, at + 6, 4); dg.setTargetAtTime(1, at + 6, 4); }
+  }
+  function riseLabel(ts) {
+    const bpm = Math.round(riseBpm(ts)), sec = riseSection(ts);
+    return { intro: "Cozy boom-bap", bridge: "Bridge, bass coming in", accel: "Picking up speed", house: "Lofi house" }[sec] + " · " + bpm + " BPM";
+  }
+
+  function startBeds() {
+    // Vinyl crackle for lo-fi, a rain bed for rain. Both are looped noise through filters.
+    {
+      const len = actx.sampleRate * 4, b = actx.createBuffer(1, len, actx.sampleRate), d = b.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() < 0.0009 ? (Math.random() * 2 - 1) * 0.8 : (Math.random() * 2 - 1) * 0.008;
+      const src = actx.createBufferSource(); src.buffer = b; src.loop = true;
+      const f = actx.createBiquadFilter(); f.type = "highpass"; f.frequency.value = 1200;
+      const g = actx.createGain(); g.gain.value = 0.35; src.connect(f).connect(g).connect(music.bus.master); src.start();
+      music.nodes.push(src);
+    }
+    if (music.station === "rain") { // rain bed under the beats
+      const src = actx.createBufferSource(); src.buffer = noiseBuffer(6, "brown"); src.loop = true;
+      const f = actx.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 1100;
+      const g = actx.createGain(); g.gain.value = 0.55; src.connect(f).connect(g).connect(music.bus.master); src.start();
+      const hiss = actx.createBufferSource(); hiss.buffer = music.noise; hiss.loop = true;
+      const hf = actx.createBiquadFilter(); hf.type = "bandpass"; hf.frequency.value = 5000; hf.Q.value = 0.4;
+      const hg = actx.createGain(); hg.gain.value = 0.04; hiss.connect(hf).connect(hg).connect(music.bus.master); hiss.start();
+      music.nodes.push(src, hiss);
+    }
+  }
+  function scheduler() {
+    const rise = music.station === "rise";
+    while (music.nextTime < actx.currentTime + 0.25) {
+      let spb, swing;
+      if (rise) {
+        let ts = music.nextTime - music.songStart;
+        if (ts >= RISE.loop) { music.songStart = music.nextTime; music.step = 0; ts = 0; }
+        const sec = riseSection(ts);
+        if (sec !== music.section) { music.section = sec; riseTransition(sec, music.nextTime); }
+        const bpm = riseBpm(ts); spb = 60 / bpm / 4;
+        swing = music.step % 2 ? spb * (bpm < 100 ? 0.22 : 0.06) : 0;
+        scheduleRise(music.nextTime + swing, music.step, ts);
+        const label = riseLabel(ts);
+        if (label !== music.label) { music.label = label; $("music-desc").textContent = label; }
+        music.nextTime += spb; music.step++;
+        continue;
+      }
+      spb = 60 / (music.station === "night" ? 84 : 100) / 4; // sixteenth notes
+      swing = music.step % 2 ? spb * 0.18 : 0;
+      scheduleLofi(music.nextTime + swing, music.step, music.station === "night");
+      if (music.station === "rain" && Math.random() < 0.25) { const t = music.nextTime + Math.random() * spb; const o = actx.createOscillator(), g = actx.createGain(); o.frequency.setValueAtTime(2400 + Math.random() * 2000, t); o.frequency.exponentialRampToValueAtTime(900, t + 0.03); g.gain.setValueAtTime(0.02, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.04); o.connect(g).connect(music.bus.master); o.start(t); o.stop(t + 0.05); }
+      music.nextTime += spb; music.step++;
+    }
+  }
+  function musicStart() {
+    unlockAudio(); if (!actx || music.playing) return;
+    if (!music.noise) music.noise = noiseBuffer(2);
+    music.bus = buildBus();
+    music.bus.input.frequency.value = music.station === "night" ? 1500 : 2600;
+    music.bus.master.gain.linearRampToValueAtTime(Math.pow(music.vol / 100, 1.6) * 0.9, actx.currentTime + 1.2);
+    music.step = 0; music.nextTime = actx.currentTime + 0.1; startBeds();
+    music.songStart = music.nextTime; music.section = null; music.label = "";
+    if (music.station === "rise") music.bus.input.frequency.value = 3200;
+    music.timer = setInterval(scheduler, 50); scheduler(); music.playing = true;
+  }
+  function musicStop() {
+    if (!music.playing) return;
+    clearInterval(music.timer); music.playing = false; music.label = "";
+    const bus = music.bus, nodes = music.nodes; music.nodes = [];
+    try { bus.master.gain.cancelScheduledValues(actx.currentTime); bus.master.gain.setTargetAtTime(0, actx.currentTime, 0.25); } catch (e) {}
+    setTimeout(() => { nodes.forEach(n => { try { n.stop(); } catch (e) {} }); try { bus.master.disconnect(); } catch (e) {} }, 1500);
+  }
+  function syncMusic() {
+    const want = music.on && (!music.auto || (endAt !== null && mode === "focus"));
+    if (want && !music.playing) musicStart(); else if (!want && music.playing) musicStop();
+    document.body.classList.toggle("music-on", music.playing);
+    $("music-icon").innerHTML = music.on ? '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/>' : '<path d="M8 5.5v13l11-6.5z"/>';
+    $("music-play").setAttribute("aria-label", music.on ? "Pause music" : "Play music");
+    $("music-desc").textContent = music.on && music.auto && !music.playing ? "Waiting for your next focus block" : (music.playing && music.label) || STATIONS[music.station];
+  }
+  function saveMusic() { state.settings.musicV2 = true; state.settings.station = music.station; state.settings.musicVol = music.vol; state.settings.musicAuto = music.auto; saveLocal(); }
+  $("music-play").addEventListener("click", () => { music.on = !music.on; syncMusic(); });
+  document.querySelectorAll("#stations button").forEach(b => {
+    b.setAttribute("aria-pressed", String(b.dataset.station === music.station));
+    b.addEventListener("click", () => {
+      music.station = b.dataset.station; saveMusic();
+      document.querySelectorAll("#stations button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      if (music.playing) { musicStop(); setTimeout(syncMusic, 350); } else { if (!music.on) music.on = true; syncMusic(); }
+    });
+  });
+  $("music-vol").value = music.vol;
+  $("music-vol").addEventListener("input", e => {
+    music.vol = +e.target.value;
+    if (music.playing) music.bus.master.gain.setTargetAtTime(Math.pow(music.vol / 100, 1.6) * 0.9, actx.currentTime, 0.1);
+  });
+  $("music-vol").addEventListener("change", saveMusic);
+  $("music-auto").checked = music.auto;
+  $("music-auto").addEventListener("change", e => { music.auto = e.target.checked; saveMusic(); syncMusic(); });
+
+  // Count a number up from 0 the first time it's shown on a screen.
+  function countUp(el, to, fmt) {
+    if (reduceMotion || to < 2) { el.textContent = fmt(to); return; }
+    const t0 = performance.now(), dur = 900;
+    const step = now => { const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(Math.round(to * e)); if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+
+  // ---------- Today ----------
+  function streakOf(p) {
+    let s = 0; const d = new Date();
+    if (!(p.days || {})[dayKey(d)]) d.setDate(d.getDate() - 1);
+    while ((p.days || {})[dayKey(d)] >= 60) { s++; d.setDate(d.getDate() - 1); }
+    return s;
+  }
+  function renderToday() {
+    const k = dayKey(), m = mins(state.me.days[k]);
+    $("s-today").textContent = fmtMin(m);
+    $("s-blocks").textContent = state.me.blocks[k] || 0;
+    $("s-streak").textContent = streakOf(state.me);
+    const g = state.settings.goal;
+    $("goal-fill").style.width = Math.min(100, m / g * 100) + "%";
+    $("goal-text").textContent = m + " / " + g + " min";
+  }
+
+  // ---------- Progress ----------
+  const shortDate = ts => new Date(ts).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  function hoursLabel(m) { const h = m / 60; return h < 1 ? m + " min" : h < 24 ? nf.format(Math.round(h * 10) / 10) + " hours" : nf.format(Math.round(h)) + " hours, about " + nf.format(Math.round(h / 24)) + " days"; }
+  function renderProgress(animate) {
+    const t = mins(totalSec(state.me));
+    if (animate) countUp($("p-total"), t, v => nf.format(v)); else $("p-total").textContent = nf.format(t);
+    $("p-unit").textContent = (t === 1 ? "minute" : "minutes") + " focused" + (t >= 60 ? " · " + hoursLabel(t) : "");
+    const nextIdx = MILESTONES.findIndex(([m]) => t < m);
+    if (nextIdx === -1) { $("p-next-title").textContent = "Every milestone done"; $("p-next-fill").style.width = "100%"; $("p-next-text").textContent = "One million minutes. Incredible."; }
+    else {
+      const [m, label] = MILESTONES[nextIdx], prev = nextIdx ? MILESTONES[nextIdx - 1][0] : 0;
+      $("p-next-title").textContent = label + " · " + nf.format(m) + " min";
+      $("p-next-fill").style.width = Math.max(1, (t - prev) / (m - prev) * 100) + "%";
+      $("p-next-text").textContent = nf.format(m - t) + " minutes to go" + (m - t >= 25 ? ", about " + nf.format(Math.ceil((m - t) / state.settings.focus)) + " focus blocks" : "");
+    }
+    const lad = $("ladder");
+    if (animate || !lad.children.length) {
+      lad.innerHTML = "";
+      MILESTONES.forEach((_, i) => { const li = document.createElement("li"); li.style.setProperty("--i", i); li.innerHTML = '<span class="amt"></span><span class="lbl"></span><span class="sub"></span>'; lad.appendChild(li); });
+    }
+    let got = 0;
+    MILESTONES.forEach(([m, label], i) => {
+      const li = lad.children[i], done = t >= m; if (done) got++;
+      li.className = "ms " + (done ? "got" : i === nextIdx ? "next" : "locked");
+      li.querySelector(".amt").textContent = nf.format(m);
+      li.querySelector(".lbl").textContent = label;
+      li.querySelector(".sub").textContent = done ? (state.me.ms[m] ? "Reached " + shortDate(state.me.ms[m]) : "Reached") : hoursLabel(m);
+      if (done && !li.querySelector(".seal")) li.insertAdjacentHTML("beforeend", '<svg class="seal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>');
+    });
+    $("p-ms-count").textContent = got + " of " + MILESTONES.length;
+
+    const box = $("days30");
+    const vals = [];
+    for (let i = 29; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); vals.push({ d, m: mins(state.me.days[dayKey(d)]) }); }
+    const max = Math.max(state.settings.goal, ...vals.map(v => v.m));
+    if (animate || box.children.length !== 30) { box.innerHTML = ""; vals.forEach((_, i) => { const b = document.createElement("div"); b.style.setProperty("--i", i); if (i === 29) b.className = "today"; box.appendChild(b); }); }
+    vals.forEach((v, i) => { const b = box.children[i]; b.style.height = (v.m / max * 100) + "%"; b.title = v.d.toLocaleDateString() + ": " + v.m + " min"; });
+    $("ax-start").textContent = vals[0].d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    $("p-30-total").textContent = fmtMin(vals.reduce((a, v) => a + v.m, 0)) + " total";
+
+    const subs = Object.entries(state.subjects).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    const ul = $("subjects"); ul.innerHTML = "";
+    if (!subs.length) { const li = document.createElement("li"); li.className = "empty"; li.style.display = "block"; li.textContent = "Each time you start, Focus Stem asks what you're focusing on. Your top subjects show up here."; ul.appendChild(li); }
+    const top = subs.length ? subs[0][1] : 1;
+    subs.forEach(([name, sec]) => {
+      const li = document.createElement("li");
+      li.innerHTML = '<span class="nm"></span><span class="mn"></span><div class="bar-track"><div></div></div>';
+      li.querySelector(".nm").textContent = name;
+      li.querySelector(".mn").textContent = fmtMin(mins(sec));
+      li.querySelector(".bar-track > div").style.width = Math.max(2, sec / top * 100) + "%";
+      ul.appendChild(li);
+    });
+
+    renderBadges($("my-badges"), myId);
+  }
+
+  function badgeSvg(seed) {
+    const sage = seed % 2 === 0;
+    return '<svg viewBox="0 0 80 80" aria-hidden="true">' +
+      '<path d="M26 50 18 76l12-6 8 10 4-26z" fill="var(--sage-ink)"/><path d="M54 50l8 26-12-6-8 10-4-26z" fill="var(--sage)"/>' +
+      '<circle cx="40" cy="34" r="29" fill="var(--mustard)"/><circle cx="40" cy="34" r="25" fill="var(--orange)"/>' +
+      '<circle cx="40" cy="34" r="19" fill="none" stroke="var(--on-accent)" stroke-width="2" stroke-dasharray="3 4"/>' +
+      '<path d="M40 20l4.1 8.6 9.4 1.2-6.9 6.5 1.8 9.3L40 41l-8.4 4.6 1.8-9.3-6.9-6.5 9.4-1.2z" fill="' + (sage ? "var(--sage-soft)" : "var(--on-accent)") + '"/></svg>';
+  }
+  function renderBadges(el, id) {
+    el.innerHTML = "";
+    const mine = id ? allFinished().filter(c => (c.winners || []).includes(id)).sort((a, b) => b.endAt - a.endAt) : [];
+    $("p-badge-count").textContent = mine.length ? mine.length + " won" : "";
+    if (!mine.length) { const e = document.createElement("div"); e.className = "empty"; e.style.flex = "1"; e.textContent = id ? "Win a competition with your friends to earn your first champion badge." : "Badges appear here once friends are available."; el.appendChild(e); return; }
+    mine.forEach((c, i) => {
+      const b = document.createElement("div"); b.className = "badge";
+      b.innerHTML = badgeSvg(i) + "<b></b><span></span>";
+      b.querySelector("b").textContent = c.name;
+      b.querySelector("span").textContent = c.days + "-day champ · " + new Date(c.endAt - 1).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      el.appendChild(b);
+    });
+  }
+
+  // ---------- Friends screen ----------
+  let scopeSel = "week";
+  async function renderFriends() {
+    if (document.activeElement !== $("my-name")) $("my-name").value = state.me.name || "";
+    const fids = friendIds();
+    $("friend-count").textContent = fids.length + " / " + MAX_FRIENDS + " friends";
+
+    const scopes = [["week", "Last 7 days"], ["all", "All time"]];
+    const mc = myComps().sort((a, b) => b.startAt - a.startAt);
+    mc.forEach(c => scopes.push(["comp:" + c.creator, c.name]));
+    if (!scopes.some(s => s[0] === scopeSel)) scopeSel = "week";
+    const sc = $("scope"); sc.innerHTML = "";
+    scopes.forEach(([k, label]) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = label;
+      b.setAttribute("aria-pressed", String(k === scopeSel));
+      b.addEventListener("click", () => { scopeSel = k; renderFriends(); });
+      sc.appendChild(b);
+    });
+
+    let rows;
+    if (scopeSel.startsWith("comp:")) {
+      rows = compStandings(comps[scopeSel.slice(5)]);
+    } else {
+      const ids = myId ? [myId, ...fids] : [];
+      const today = dayKey(), wk = new Date(); wk.setDate(wk.getDate() - 6);
+      rows = ids.filter(id => players[id]).map(id => ({ id, sec: scopeSel === "all" ? totalSec(players[id]) : secBetween(players[id], dayKey(wk), today) })).sort((a, b) => b.sec - a.sec);
+    }
+    const ids = rows.map(r => r.id);
+    if (user && ids.length) { try { profiles = await user.profiles(ids); } catch (e) {} }
+    const board = $("board"); board.innerHTML = "";
+    if (!myId) { board.innerHTML = '<li class="empty" style="display:block">The leaderboard shows up once you open Stem signed in.</li>'; }
+    else if (rows.length <= 1 && !fids.length) {
+      const li = document.createElement("li"); li.className = "empty"; li.style.display = "block";
+      li.textContent = "No friends yet. Send an invite link to start competing.";
+      board.appendChild(li);
+    }
+    const finished = allFinished();
+    if (rows.length > 1 || fids.length) rows.forEach((r, i) => {
+      const p = players[r.id] || {}, prof = profiles[r.id] || {};
+      const li = document.createElement("li"); if (r.id === myId) li.className = "me";
+      li.style.setProperty("--i", i);
+      li.innerHTML = '<span class="rank"></span><img alt=""><span class="who"></span><span class="mins"></span><span></span>';
+      li.querySelector(".rank").textContent = i + 1;
+      const av = li.querySelector("img"); if (prof.avatarUrl) av.src = prof.avatarUrl; else av.style.visibility = "hidden";
+      const who = li.querySelector(".who");
+      who.textContent = p.name || prof.name || "Student";
+      if (r.id === myId) { const s = document.createElement("small"); s.textContent = " (you)"; who.appendChild(s); }
+      li.querySelector(".mins").textContent = nf.format(mins(r.sec)) + " min";
+      const last = li.lastElementChild;
+      const wins = finished.filter(c => (c.winners || []).includes(r.id)).length;
+      if (r.id !== myId && !scopeSel.startsWith("comp:")) {
+        last.innerHTML = '<button class="x" type="button" title="Remove friend" aria-label="Remove friend">×</button>';
+        last.querySelector("button").addEventListener("click", () => removeFriend(r.id));
+      } else if (wins) { last.innerHTML = '<span class="pill" title="Competitions won"></span>'; last.firstChild.textContent = wins + (wins === 1 ? " win" : " wins"); }
+      board.appendChild(li);
+    });
+
+    const cl = $("comps"); cl.innerHTML = "";
+    const running = comps[myId] && comps[myId].endAt > Date.now();
+    $("comp-submit").disabled = !myId || !canWrite || running;
+    const list = [...mc];
+    finished.filter(c => (c.members || []).includes(myId)).forEach(c => { if (!list.some(x => x.creator === c.creator && x.startAt === c.startAt)) list.push(c); });
+    list.sort((a, b) => b.startAt - a.startAt);
+    if (!list.length) { const e = document.createElement("div"); e.className = "empty"; e.textContent = myId ? "No competitions yet. Pick a length and start one with all your friends." : "Competitions need a signed-in view."; cl.appendChild(e); }
+    const nameOf = id => (players[id] && players[id].name) || (profiles[id] && profiles[id].name) || (id === myId ? "You" : "A friend");
+    for (const c of list.slice(0, 8)) {
+      const live = c.endAt > Date.now();
+      const d = document.createElement("div"); d.className = "comp";
+      d.innerHTML = '<h3></h3><div class="comp-meta"><span class="pill"></span><span class="when"></span></div><div class="comp-meta lead"></div>';
+      d.querySelector("h3").textContent = c.name;
+      const pill = d.querySelector(".pill"); pill.textContent = live ? "Live" : "Finished"; if (live) pill.classList.add("live");
+      const left = c.endAt - Date.now();
+      d.querySelector(".when").textContent = live ? (left > 86400000 ? Math.ceil(left / 86400000) + " days left" : Math.ceil(left / 3600000) + " hours left") + " · " + c.members.length + " players" : c.days + " days · ended " + new Date(c.endAt - 1).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      const lead = d.querySelector(".lead");
+      const st = live ? compStandings(c) : null;
+      const winners = live ? (st[0] && st[0].sec >= 60 ? [st[0].id] : []) : (c.winners || []);
+      lead.textContent = winners.length ? (live ? "Leading: " : "Champion: ") + winners.map(nameOf).join(" & ") : (live ? "Nobody has focused yet" : "No winner");
+      if (live && c.creator === myId) {
+        const b = document.createElement("button"); b.className = "ghost"; b.type = "button"; b.textContent = "End now";
+        b.addEventListener("click", endCompEarly); lead.appendChild(document.createTextNode(" ")); lead.appendChild(b);
+      }
+      cl.appendChild(d);
+    }
+  }
+
+  // ---------- Invites ----------
+  // The invite link carries the inviter's id in the hash. Opening it makes the two players friends.
+  // Inside Claude the page runs in a frame, so links point at the published artifact.
+  const APP_URL = "https://claude.ai/artifact/DFeDF7mDhc1LM18BtePjxS";
+  const inviteUrl = () => NET ? location.origin + location.pathname + "?join=" + encodeURIComponent(myId) + "#about" : APP_URL + "#join=" + myId;
+  async function acceptInvite() {
+    if (!joinFrom) return;
+    const from = joinFrom, msg = $("friend-msg"); joinFrom = null;
+    try { localStorage.removeItem("stem-join"); } catch (e) {}
+    const say = (t, ok) => { msg.className = "form-msg " + (ok ? "ok" : "err"); msg.textContent = t; };
+    if (from === myId) return toast("That's your own invite link");
+    if (!canWrite) return toast("You have view-only access, so you can't join friends here");
+    if (friendIds().includes(from)) return toast("You're already friends");
+    if (friendIds().length >= MAX_FRIENDS) return toast("You already have 30 friends, the most allowed");
+    let inviter = null;
+    try { inviter = await db.doc("players/" + from).get(); } catch (e) {}
+    if (!inviter || !inviter.exists) return toast("That invite link isn't valid anymore");
+    if (friendCountOf(from) >= MAX_FRIENDS) return toast("Your friend already has 30 friends");
+    state.me.friends = [...new Set([...state.me.friends, from])];
+    state.me.removed = state.me.removed.filter(x => x !== from);
+    players[myId] = Object.assign({}, players[myId], playerRecord());
+    await pushMe();
+    const name = (inviter.data() || {}).name || "your friend";
+    toast("You're now friends with " + name);
+    say("You're friends with " + name + ".", true);
+    renderAll();
+    if (NET) showView("friends");
+  }
+  async function removeFriend(id) {
+    state.me.friends = state.me.friends.filter(x => x !== id);
+    state.me.removed = [...new Set([...state.me.removed, id])];
+    players[myId] = Object.assign({}, players[myId], playerRecord());
+    await pushMe(); toast("Friend removed"); renderAll();
+  }
+
+  $("name-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    state.me.name = $("my-name").value.trim().slice(0, 24);
+    players[myId] = Object.assign({}, players[myId] || {}, playerRecord());
+    await pushMe(); toast("Name saved"); renderAll();
+  });
+  $("comp-form").addEventListener("submit", e => { e.preventDefault(); startComp($("comp-name").value.trim(), +$("comp-days").value); });
+  $("invite-gmail").addEventListener("click", () => {
+    if (!myId) return toast("Open Focus Stem signed in to send an invite");
+    const subject = "Study with me on Focus Stem";
+    const body = "Join me on Focus Stem. Open this link and we'll be friends on the leaderboard:\n\n" + inviteUrl();
+    const to = $("invite-email").value.trim();
+    window.open("https://mail.google.com/mail/?view=cm&fs=1" + (to ? "&to=" + encodeURIComponent(to) : "") + "&su=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body), "_blank", "noopener");
+    $("invite-email").value = "";
+  });
+  $("copy-invite").addEventListener("click", () => {
+    if (!myId) return toast("Open Focus Stem signed in to get your invite link");
+    navigator.clipboard.writeText(inviteUrl()).then(() => toast("Invite link copied")).catch(() => toast("Couldn't copy. Try Send in Gmail instead."));
+  });
+
+  // ---------- Views ----------
+  const VIEWS = ["about", "timer", "progress", "friends", "reviews"];
+  let view = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "about";
+  function moveSlider() {
+    const b = document.querySelector('nav.tabs button[aria-selected="true"]'), s = $("slider");
+    if (!b) return;
+    s.style.left = b.offsetLeft + "px"; s.style.width = b.offsetWidth + "px";
+  }
+  function showView(v) {
+    view = v;
+    VIEWS.forEach(n => {
+      const el = $("view-" + n), on = n === v;
+      if (on && el.hidden) { el.hidden = false; el.style.animation = "none"; void el.offsetHeight; el.style.animation = ""; }
+      else if (!on) el.hidden = true;
+    });
+    document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.view === v)));
+    moveSlider();
+    try { history.replaceState(null, "", "#" + v); } catch (e) {}
+    renderAll(true);
+    if (v === "about") layoutRoot();
+  }
+  document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => showView(b.dataset.view)));
+  addEventListener("resize", moveSlider);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { moveSlider(); if (view === "about") layoutRoot(); });
+
+  // ---------- About: a taproot grows down through the soil as you scroll ----------
+  // The soil is painted once per layout; the root is redrawn each scroll frame up to the depth you've read to.
+  const soil = $("soil"), sc = $("soil-canvas"), sctx = sc.getContext("2d");
+  const causeCards = [...soil.querySelectorAll(".cause")];
+  const SURF = 150; // ground level inside the soil section
+  let soilImg = null, roots = null, soilW = 0, soilH = 0, sdpr = 1, rootTicking = false;
+  function rng(seed) { return () => { seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  const groundY = x => SURF + Math.sin(x * 0.021) * 3 + Math.sin(x * 0.067 + 2) * 1.6;
+
+  function paintSoil(w, h) {
+    const c = document.createElement("canvas"); c.width = w * sdpr; c.height = h * sdpr;
+    const g = c.getContext("2d"); g.scale(sdpr, sdpr);
+    const R = rng(7);
+    // ground body
+    g.save(); g.beginPath(); g.moveTo(0, h); g.lineTo(0, groundY(0));
+    for (let x = 0; x <= w; x += 6) g.lineTo(x, groundY(x));
+    g.lineTo(w, h); g.closePath(); g.clip();
+    const lg = g.createLinearGradient(0, SURF, 0, h);
+    lg.addColorStop(0, "#6b4a2e"); lg.addColorStop(0.06, "#5b3e26"); lg.addColorStop(0.3, "#4a321e"); lg.addColorStop(0.65, "#3a2616"); lg.addColorStop(1, "#2a1a0e");
+    g.fillStyle = lg; g.fillRect(0, SURF - 10, w, h);
+    // strata
+    for (let i = 0; i < 7; i++) {
+      const y0 = SURF + 60 + R() * (h - SURF - 80), th = 8 + R() * 30, ph = R() * 6;
+      g.beginPath(); g.moveTo(0, y0);
+      for (let x = 0; x <= w; x += 10) g.lineTo(x, y0 + Math.sin(x * 0.008 + ph) * 10 + Math.sin(x * 0.03 + ph) * 3);
+      for (let x = w; x >= 0; x -= 10) g.lineTo(x, y0 + th + Math.sin(x * 0.009 + ph + 1) * 8);
+      g.closePath(); g.fillStyle = R() < 0.5 ? "rgba(255, 215, 160, .045)" : "rgba(0, 0, 0, .09)"; g.fill();
+    }
+    // dark topsoil
+    const tg = g.createLinearGradient(0, SURF, 0, SURF + 50);
+    tg.addColorStop(0, "rgba(25, 14, 6, .55)"); tg.addColorStop(1, "rgba(25, 14, 6, 0)");
+    g.fillStyle = tg; g.fillRect(0, SURF - 6, w, 60);
+    // grain
+    const n = Math.floor(w * (h - SURF) / 70), tones = ["rgba(255, 225, 180, .10)", "rgba(0, 0, 0, .22)", "rgba(170, 125, 80, .20)", "rgba(255, 240, 210, .06)"];
+    for (let i = 0; i < n; i++) { g.fillStyle = tones[i % 4]; const sz = R() < 0.85 ? 1 : 2; g.fillRect(R() * w, SURF + R() * (h - SURF), sz, sz); }
+    // pebbles
+    const pc = Math.floor(w * (h - SURF) / 16000);
+    for (let i = 0; i < pc; i++) {
+      const x = R() * w, y = SURF + 20 + R() * (h - SURF - 20), rx = 3 + R() * 10, ry = rx * (0.55 + R() * 0.3), rot = R() * Math.PI;
+      g.save(); g.translate(x, y); g.rotate(rot);
+      g.fillStyle = "rgba(0, 0, 0, .3)"; g.beginPath(); g.ellipse(1.5, 2, rx, ry, 0, 0, Math.PI * 2); g.fill();
+      const pg = g.createRadialGradient(-rx * 0.35, -ry * 0.4, 1, 0, 0, rx);
+      const base = [[150, 132, 112], [124, 104, 84], [168, 150, 128], [110, 92, 76]][i % 4];
+      pg.addColorStop(0, `rgb(${base.map(v => Math.min(255, v + 45)).join(",")})`); pg.addColorStop(1, `rgb(${base.map(v => v - 40).join(",")})`);
+      g.fillStyle = pg; g.beginPath(); g.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2); g.fill();
+      g.restore();
+    }
+    g.restore();
+    // grass along the surface
+    for (let x = 2; x < w; x += 2 + R() * 4) {
+      const y = groundY(x) + 2, hgt = 5 + R() * 13, lean = (R() - 0.5) * 8;
+      g.strokeStyle = ["#5d7b4a", "#7d9a6a", "#4b6a3c", "#8fae7c"][Math.floor(R() * 4)]; g.lineWidth = 1.3 + R() * 0.8; g.lineCap = "round";
+      g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + lean * 0.3, y - hgt * 0.6, x + lean, y - hgt); g.stroke();
+    }
+    // the sprout: a stem and two leaves above the root
+    const cx = w / 2, top = SURF - 78;
+    g.strokeStyle = "#5f7f4b"; g.lineWidth = 4; g.lineCap = "round";
+    g.beginPath(); g.moveTo(cx, SURF + 2); g.bezierCurveTo(cx - 6, SURF - 30, cx + 6, SURF - 55, cx, top); g.stroke();
+    const leaf = (dir, len, ang, y) => {
+      g.save(); g.translate(cx, y); g.rotate(ang);
+      const lg2 = g.createLinearGradient(0, 0, dir * len, 0); lg2.addColorStop(0, "#6f9160"); lg2.addColorStop(1, "#9dbb87");
+      g.fillStyle = lg2; g.beginPath(); g.moveTo(0, 0);
+      g.bezierCurveTo(dir * len * 0.3, -len * 0.42, dir * len * 0.8, -len * 0.32, dir * len, 0);
+      g.bezierCurveTo(dir * len * 0.7, len * 0.22, dir * len * 0.3, len * 0.2, 0, 0); g.fill();
+      g.strokeStyle = "rgba(40, 60, 30, .45)"; g.lineWidth = 1; g.beginPath(); g.moveTo(0, 0); g.quadraticCurveTo(dir * len * 0.5, -len * 0.06, dir * len * 0.95, 0); g.stroke();
+      g.restore();
+    };
+    leaf(-1, 40, 0.35, top + 8); leaf(1, 46, -0.3, top + 2); leaf(1, 26, 0.5, SURF - 34);
+    return c;
+  }
+
+  // Root geometry: a wavering, tapering taproot that splits into five branches, each ending at its card, plus fine root hairs.
+  function buildRoots(rect) {
+    const R = rng(21), cx = soilW / 2;
+    const splitY = $("soil-depth").getBoundingClientRect().bottom - rect.top - 24;
+    const trunk = [], hairs = [], branches = [];
+    const N = Math.max(10, Math.ceil((splitY - SURF) / 5));
+    for (let i = 0; i <= N; i++) {
+      const t = i / N, y = SURF + 2 + t * (splitY - SURF - 2);
+      trunk.push([cx + Math.sin(t * 5.1 + 0.6) * 12 * (0.3 + t) + Math.sin(t * 17.3) * 3 * t, y, 17 - 9 * t]);
+    }
+    const [sx, sy] = trunk[trunk.length - 1];
+    causeCards.forEach((card, ci) => {
+      const cr = card.getBoundingClientRect();
+      const tx = cr.left - rect.left + cr.width * (0.35 + 0.3 * R()), ty = cr.top - rect.top + 16;
+      const pts = [], len = Math.hypot(tx - sx, ty - sy), M = Math.max(12, Math.ceil(len / 5)), ph = R() * 6;
+      for (let i = 0; i <= M; i++) {
+        const t = i / M, u = 1 - t;
+        // cubic: heads down first, then bends toward the card
+        const x = u * u * u * sx + 3 * u * u * t * (sx + (tx - sx) * 0.15) + 3 * u * t * t * (tx - (tx - sx) * 0.05) + t * t * t * tx;
+        const y = u * u * u * sy + 3 * u * u * t * (sy + (ty - sy) * 0.5) + 3 * u * t * t * (ty - (ty - sy) * 0.35) + t * t * t * ty;
+        const wob = Math.sin(t * 9 + ph) * 4 * Math.sin(t * Math.PI);
+        pts.push([x + wob, y, 8 - 6.3 * t]);
+      }
+      branches.push({ pts, startY: sy, tipY: ty, card });
+      for (let k = 6; k < pts.length - 4; k += 7 + Math.floor(R() * 6)) hairs.push(makeHair(pts[k], R, 0.6, pts[k][1]));
+    });
+    for (let k = 8; k < trunk.length - 2; k += 6 + Math.floor(R() * 5)) hairs.push(makeHair(trunk[k], R, 1, trunk[k][1]));
+    return { trunk, branches, hairs, splitY: sy };
+  }
+  function makeHair(base, R, scale, startY) {
+    const side = R() < 0.5 ? -1 : 1, len = (22 + R() * 50) * scale, ang = (0.5 + R() * 0.7);
+    const pts = [], M = 8, w0 = Math.max(0.8, base[2] * 0.22);
+    for (let i = 0; i <= M; i++) {
+      const t = i / M, d = len * t;
+      pts.push([base[0] + side * Math.cos(ang) * d, base[1] + Math.sin(ang) * d + t * t * len * 0.35, w0 * (1 - t) + 0.3]);
+    }
+    return { pts, startY };
+  }
+  function strokeRoot(pts, count) {
+    if (count < 2) return;
+    const passes = [["#3a2413", 3.2, 0], ["#c9a479", 0, 0], ["rgba(255, 238, 210, .55)", -0.68, -0.2]];
+    sctx.lineCap = "round"; sctx.lineJoin = "round";
+    for (const [color, extra, off] of passes) {
+      sctx.strokeStyle = color;
+      for (let i = 1; i < count; i++) {
+        const a = pts[i - 1], b = pts[i], w = (a[2] + b[2]) / 2;
+        const lw = extra < 0 ? w * -extra * 0.45 : w + extra;
+        sctx.lineWidth = Math.max(0.4, lw);
+        sctx.beginPath(); sctx.moveTo(a[0] + off * w, a[1]); sctx.lineTo(b[0] + off * w, b[1]); sctx.stroke();
+      }
+    }
+  }
+  function layoutRoot() {
+    const rect = soil.getBoundingClientRect();
+    soilW = Math.round(rect.width); soilH = Math.round(rect.height);
+    if (!soilW || !soilH) return;
+    sdpr = Math.min(2, window.devicePixelRatio || 1);
+    sc.width = soilW * sdpr; sc.height = soilH * sdpr;
+    soilImg = paintSoil(soilW, soilH);
+    roots = buildRoots(rect);
+    drawRoot();
+  }
+  function drawRoot() {
+    rootTicking = false;
+    if (!soilImg || !roots || view !== "about") return;
+    const top = soil.getBoundingClientRect().top;
+    const depth = reduceMotion ? Infinity : innerHeight * 0.62 - top; // how far down you've read, in soil coordinates
+    sctx.setTransform(sdpr, 0, 0, sdpr, 0, 0);
+    sctx.clearRect(0, 0, soilW, soilH);
+    sctx.drawImage(soilImg, 0, 0, soilW, soilH);
+    for (const h of roots.hairs) {
+      const f = Math.min(1, Math.max(0, (depth - h.startY) / 70));
+      strokeRoot(h.pts, Math.round(f * (h.pts.length - 1)) + 1);
+    }
+    for (const b of roots.branches) {
+      const f = Math.min(1, Math.max(0, (depth - b.startY) / (b.tipY - b.startY)));
+      strokeRoot(b.pts, Math.round(f * (b.pts.length - 1)) + 1);
+      b.card.classList.toggle("reached", f >= 1);
+    }
+    let n = 0; while (n < roots.trunk.length && roots.trunk[n][1] <= depth) n++;
+    strokeRoot(roots.trunk, n);
+  }
+  addEventListener("scroll", () => { if (!rootTicking) { rootTicking = true; requestAnimationFrame(drawRoot); } }, { passive: true });
+  addEventListener("resize", () => { if (view === "about") layoutRoot(); });
+  $("about-start").addEventListener("click", () => showView("timer"));
+
+  // ---------- Settings ----------
+  const dlg = $("settings");
+  $("open-settings").addEventListener("click", () => {
+    const s = state.settings;
+    $("set-focus").value = s.focus; $("set-short").value = s.short; $("set-long").value = s.long;
+    $("set-every").value = s.every; $("set-goal").value = s.goal; $("set-sound").checked = s.sound; $("set-auto").checked = s.auto; $("set-clicks").checked = s.clicks !== false;
+    dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", "");
+  });
+  dlg.addEventListener("close", () => {
+    if (dlg.returnValue !== "save") return;
+    const n = (id, lo, hi, fb) => { const v = Math.round(+$(id).value); return v >= lo && v <= hi ? v : fb; };
+    const s = state.settings;
+    s.focus = n("set-focus", 1, 120, s.focus); s.short = n("set-short", 1, 60, s.short); s.long = n("set-long", 1, 60, s.long);
+    s.every = n("set-every", 2, 8, s.every); s.goal = n("set-goal", 5, 1000, s.goal);
+    s.sound = $("set-sound").checked; s.auto = $("set-auto").checked; s.clicks = $("set-clicks").checked;
+    saveLocal(); if (endAt === null) setMode(mode);
+    renderAll(); toast("Settings saved");
+  });
+
+  // ---------- Misc ----------
+  let toastT;
+  function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 3400); }
+  document.addEventListener("keydown", e => {
+    if (e.target.closest("input, select, textarea, dialog") || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.code === "Space" && !e.target.closest("button") && view === "timer") { e.preventDefault(); $("start").click(); }
+  });
+  document.addEventListener("visibilitychange", () => { if (endAt !== null && document.visibilityState === "visible") tick(); if (document.visibilityState === "hidden") pushMe(); });
+
+  function renderAll(fresh) {
+    renderTimer();
+    if (view === "timer") renderToday();
+    if (view === "progress") renderProgress(!!fresh);
+    if (view === "friends") renderFriends();
+    if (view === "reviews") renderReviews();
+  }
+  setMode("focus");
+  showView(view);
+  connect();
+})();
+</script>
+
+</body>
+</html>
